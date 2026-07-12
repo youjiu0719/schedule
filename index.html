@@ -319,7 +319,8 @@
   }
   .spot-header{
     width:100%;
-    display:flex; align-items:center; justify-content:space-between;
+    display:flex; align-items:flex-start;
+    justify-content:space-between;
     gap: 10px;
     padding: 13px 14px;
     background:none; border:none; cursor:pointer;
@@ -330,11 +331,13 @@
     text-align:left;
     min-height: 44px;
   }
+  .spot-header-text{ display:flex; flex-direction:column; gap:3px; }
   .spot-header .chev{
     font-family: var(--font-mono);
     color: var(--ink-muted);
     transition: transform .2s ease;
     flex-shrink:0;
+    padding-top: 2px;
   }
   .spot.open .spot-header .chev{ transform: rotate(180deg); }
   .spot-body{
@@ -343,7 +346,7 @@
     transition: max-height .25s ease;
     background: var(--surface);
   }
-  .spot.open .spot-body{ max-height: 600px; }
+  .spot.open .spot-body{ /* max-height set inline by JS to fit content */ }
   .spot-body-inner{ padding: 4px 14px 16px; }
   .spot-block{ margin-bottom: 12px; }
   .spot-block:last-of-type{ margin-bottom: 14px; }
@@ -354,7 +357,13 @@
     color: var(--teal);
     margin-bottom: 4px;
   }
-  .spot-block p{ margin:0; font-size: 13.8px; color: var(--ink); }
+  .spot-block p{ margin:0; font-size: 13.8px; color: var(--ink); white-space: pre-line; }
+  .spot-block p.en{ font-size: 12.5px; color: var(--ink-muted); font-style: italic; margin-top: 6px; padding-top: 8px; border-top: 1px dashed var(--line); }
+  .spot-tagline{ display:block; font-size: 12px; font-weight:400; color: var(--ink-muted); margin-top: 2px; }
+  .spot-tagline .en{ font-style: italic; }
+  .extras{ margin-top: 22px; }
+  .extras h3{ font-family: var(--font-display); font-size: 16px; margin: 0 0 4px; }
+  .extras .sub{ font-size: 12.5px; color: var(--ink-muted); margin-bottom: 12px; }
   .spot-links{ display:flex; gap:8px; flex-wrap:wrap; }
   .spot-links a{
     font-family: var(--font-mono);
@@ -425,6 +434,8 @@
       <dt>房型</dt><dd>依實際訂房分配安排，由帶隊老師統一管理入住、房間分配及每日人員確認</dd>
     </dl>
   </div>
+
+  <div class="extras" id="extrasSection"></div>
 </main>
 
 <footer>行程若有異動，以帶隊老師現場公告為準</footer>
@@ -473,35 +484,87 @@ function transitLink(name){
   return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(ACCOM_ADDRESS)}&destination=${encodeURIComponent(name + ' Melbourne')}&travelmode=transit`;
 }
 
-// 草稿內容：先用一般公開資訊寫的拍攝手法／景點故事，等你的檔案給我之後會換成你原本的文字
+// 內容改寫自你提供的 Melbourne Story Series 文件（英文原文 + 中文翻譯），拍攝手法為額外補充建議
 const SPOTS = {
   2: [
-    { name:"Flinders Street Station", photo:"從對面 Federation Square 的階梯往上拍，可以把黃色鐘樓跟站前人潮一起收進畫面；傍晚燈光亮起後鐘樓會變暖黃色，適合拍夜景。", story:"1854 年啟用，是澳洲最古老的火車站，也是墨爾本人約會集合的地標，「我們在鐘下見」是在地人的口頭禪。" },
-    { name:"Federation Square", photo:"廣場地磚是不規則多邊形拼貼，蹲低由上往下拍地面紋理很有設計感；傍晚大螢幕投影亮起時適合拍城市夜景與人潮。", story:"2002 年落成，是墨爾本各種慶典、展覽、集會活動的中心廣場。" },
-    { name:"ACMI 澳洲動態影像中心", photo:"館內互動展覽燈光偏暗，建議關閃光燈，善用螢幕本身的光源當補光。", story:"全名 Australian Centre for the Moving Image，是全球少數專門收藏電影、電視與遊戲文化的博物館。" },
+    { name:"Flinders Street Station", tagEn:"Melbourne's Most Famous Meeting Place", tagZh:"墨爾本最著名的集合地標",
+      zh:"福林德斯街車站黃色外牆、綠色圓頂與著名的大鐘，讓它矗立墨爾本市中心已超過一世紀。第一座車站建於1854年淘金熱時期，今天看到的建築則在1909年完工，很快成為墨爾本成長與自信的象徵。\n\n在智慧型手機出現以前，墨爾本人習慣約在車站大鐘下見面，「鐘下見」至今仍是在地傳統。還有個著名都市傳說：車站設計圖當年不小心跟印度孟買的車站搞混了——雖然並非事實，卻流傳至今。它不只是交通樞紐，更是無數墨爾本旅程開始的地方。",
+      en:"With its yellow façade, green dome, and iconic clocks, Flinders Street Station has stood at the heart of Melbourne for more than a century. The first station was built here in 1854 during Victoria's gold rush; today's building was completed in 1909 and quickly became a symbol of the city's growth and confidence.\n\nLong before smartphones, Melburnians arranged to meet beneath the station's famous clocks — \"Meet me under the clocks\" is still a local tradition today. A well-known urban legend claims its design was accidentally swapped with a station in Mumbai; though untrue, the story endures.",
+      photo:"從對面 Federation Square 的階梯往上拍，可以把黃色鐘樓跟站前人潮一起收進畫面；傍晚燈光亮起後鐘樓會變暖黃色，適合拍夜景。" },
+    { name:"Federation Square", tagEn:"The Square That Melbourne Once Hated", tagZh:"墨爾本曾經討厭的廣場",
+      zh:"2002年開幕時，聯邦廣場並不是人人都喜歡——大膽前衛的設計和周圍的歷史建築格格不入，不少評論甚至說它醜，一度是澳洲最具爭議的建築案之一。\n\n但人們還是開始使用它：家庭在此聚會、藝術家在此表演、重大活動在此轉播。久而久之，它成了「墨爾本的客廳」，聚集了博物館、藝廊與各種節慶活動，也成為這座城市最容易辨認的地標之一。",
+      en:"When Federation Square opened in 2002, not everyone loved it — its bold, unusual design looked nothing like the historic buildings around it, and many critics called it ugly. For a time it was one of Australia's most controversial construction projects.\n\nYet people started using it anyway: families gathered, artists performed, major events were broadcast here. Over time it became Melbourne's living room — home to museums, galleries, and festivals.",
+      photo:"廣場地磚是不規則多邊形拼貼，蹲低由上往下拍地面紋理很有設計感；傍晚大螢幕投影亮起時適合拍城市夜景與人潮。" },
+    { name:"ACMI 澳洲動態影像中心", tagEn:"Where Stories Come to Life", tagZh:"故事誕生的地方",
+      zh:"位於聯邦廣場內的ACMI（澳洲動態影像中心），是澳洲的國家級螢幕文化博物館，探討人類如何透過動態影像說故事——從早期電影、電視，到電玩遊戲、動畫與社群媒體都在其中。\n\n館內可以認識電影製作的歷史、了解視覺特效如何完成，還有許多互動展覽揭露現代媒體背後的創作過程。ACMI提醒我們：科技一直在變，但人類想說故事的渴望始終不變。",
+      en:"Located in Federation Square, ACMI (the Australian Centre for the Moving Image) is Australia's national museum of screen culture, exploring how stories are told through moving images — from early cinema and television to video games, animation, and social media.\n\nInside, visitors can explore the history of filmmaking, see how visual effects are made, and try interactive exhibits revealing the creative process behind modern media.",
+      photo:"館內互動展覽燈光偏暗，建議關閃光燈，善用螢幕本身的光源當補光。" },
   ],
   3: [
-    { name:"Queen Victoria Market", photo:"清晨市場剛開攤位時人少光線好，蔬果攤位的顏色堆疊很適合拍特寫；紅磚建築外觀在正午順光最清楚。", story:"1878 年開始營業，是南半球最大的露天市場，140 多年來仍是墨爾本人日常採買的地方。" },
-    { name:"State Library of Victoria", photo:"必拍 La Trobe Reading Room，從二樓環形走廊往下俯拍圓頂閱覽室，能拍到放射狀書桌排列的對稱美。", story:"1854 年開幕，是澳洲最古老的公共圖書館，圓頂閱覽室曾是全世界最大的圓頂建築之一。" },
+    { name:"Queen Victoria Market", tagEn:"More Than Just a Market", tagZh:"不只是一座市場",
+      zh:"維多利亞女王市場佔地超過七公頃，是南半球最大的露天市場。自1878年開業至今，每年吸引數百萬遊客造訪數百個攤位，販售新鮮蔬果、海鮮、肉品、服飾以及來自世界各地的美食。\n\n走在市場裡，就像走過一趟墨爾本的縮影——希臘橄欖、義大利起司、亞洲香料、澳洲蜂蜜，幾步路內就能全部找到。開業140多年後，它真正的魅力是網路購物永遠取代不了的：人與人之間的連結。",
+      en:"Covering more than seven hectares, Queen Victoria Market is the largest open-air market in the Southern Hemisphere. Open since 1878, it draws millions of visitors each year to hundreds of stalls selling fresh produce, seafood, meat, clothing, and food from around the world.\n\nWalking through the market feels like a journey through Melbourne itself — Greek olives, Italian cheeses, Asian spices, and Australian honey all sit within a few steps of each other.",
+      photo:"清晨市場剛開攤位時人少光線好，蔬果攤位的顏色堆疊很適合拍特寫；紅磚建築外觀在正午順光最清楚。" },
+    { name:"State Library of Victoria", tagEn:"The Library Built for Everyone", tagZh:"為所有人而建的圖書館",
+      zh:"維多利亞州立圖書館成立於1854年，是澳洲歷史最悠久的公共圖書館之一，也是全世界最早的免費公共圖書館之一。從創立之初，它的使命就很簡單：讓每個人都能自由取得知識。\n\n館內最著名的空間是1913年啟用、八角形設計的拉籌伯閱覽室（La Trobe Reading Room），曾是全球最大的閱覽室之一。超過170年後的今天，館內仍收藏數百萬冊書籍、照片與手稿。",
+      en:"Established in 1854, State Library Victoria is one of the oldest public libraries in Australia and one of the first free public libraries in the world. Its mission from the start was simple: give everyone access to knowledge.\n\nIts most famous space, the octagonal La Trobe Reading Room, opened in 1913 and was once one of the largest reading rooms in the world.",
+      photo:"必拍 La Trobe Reading Room，從二樓環形走廊往下俯拍圓頂閱覽室，能拍到放射狀書桌排列的對稱美。" },
   ],
   4: [
-    { name:"University of Melbourne", photo:"Old Quad 古典建築配藍天很好拍，低角度取景把哥德式建築和草皮一起收進畫面。", story:"創立於 1853 年，是澳洲第二古老的大學，校園內保留許多維多利亞時期建築。" },
-    { name:"Lygon Street", photo:"街道兩側露天咖啡座色彩繽紛，適合拍街景人文；傍晚燈飾亮起後很有義式風情。", story:"墨爾本最早的義大利移民聚落，被稱為「小義大利」，戰後義裔移民在此開設許多咖啡館與餐廳。" },
-    { name:"Melbourne Zoo", photo:"拍動物建議用長焦鏡頭，耐心等動物靠近玻璃或欄杆邊緣的瞬間再按快門，可避免拍到反光。", story:"1862 年開園，是澳洲最古老的動物園之一。" },
+    { name:"University of Melbourne", tagEn:"A University That Helped Build a Nation", tagZh:"協助建構一個國家的大學",
+      zh:"墨爾本大學創立於1853年維多利亞淘金熱正盛之時，是澳洲第二古老的大學。它的使命從來不只是教育學生，更是協助打造一個現代社會——畢業生中包括總理、法官、科學家與諾貝爾獎得主。\n\n如今，墨爾本大學穩居世界頂尖大學之列，吸引超過150個國家的學生前來就讀。走在校園裡，哥德復興式建築與尖端研究設施比鄰而立。",
+      en:"Founded in 1853 during Victoria's gold-rush boom, the University of Melbourne is Australia's second-oldest university. Its mission was never just to teach students, but to help build a modern society — its graduates include prime ministers, judges, scientists, and Nobel Prize winners.\n\nToday the university consistently ranks among the world's best and draws students from over 150 countries.",
+      photo:"Old Quad 古典建築配藍天很好拍，低角度取景把哥德式建築和草皮一起收進畫面。" },
+    { name:"Lygon Street", tagEn:"The Street That Brought Italy to Melbourne", tagZh:"把義大利帶到墨爾本的一條街",
+      zh:"位於卡爾頓區的萊貢街（Lygon Street）有「小義大利」之稱，以咖啡館、餐廳與義式冰淇淋聞名。但它的故事要從二戰後說起——當時大批義大利移民定居墨爾本，開設家族經營的咖啡館與餐廳，代代相傳著傳統食譜。\n\n早在世界各地流行精品咖啡之前，義大利移民就已經把濃縮咖啡機和咖啡館文化帶到這裡——不少歷史學家認為，萊貢街正是墨爾本知名咖啡文化的發源地。",
+      en:"Known as Melbourne's Little Italy, Lygon Street in Carlton is famous today for its cafés, restaurants, and gelato. Its story began after World War II, when thousands of Italian migrants settled in Melbourne and opened family-run cafés, passing recipes down through generations.\n\nMany historians consider Lygon Street the birthplace of Melbourne's famous coffee culture.",
+      photo:"街道兩側露天咖啡座色彩繽紛，適合拍街景人文；傍晚燈飾亮起後很有義式風情。" },
+    { name:"Melbourne Zoo", tagEn:"Protecting Wildlife for Future Generations", tagZh:"為下一代守護野生動物",
+      zh:"墨爾本動物園成立於1862年，是澳洲歷史最悠久的動物園。它的角色隨著時代大幅轉變——現代動物園不再只是展示動物，而是更著重保育、研究與動物福利。\n\n墨爾本動物園參與澳洲國內外的繁殖計畫與保育專案，園內也能見到袋鼠、無尾熊、袋熊等澳洲原生物種。",
+      en:"Established in 1862, Melbourne Zoo is Australia's oldest zoo. Today's zoos focus less on simply displaying animals and more on conservation, research, and animal welfare.\n\nMelbourne Zoo takes part in breeding programs and conservation projects both in Australia and overseas, and is home to native species like kangaroos, koalas, and wombats.",
+      photo:"拍動物建議用長焦鏡頭，耐心等動物靠近玻璃或欄杆邊緣的瞬間再按快門，可避免拍到反光。" },
   ],
   5: [
-    { name:"Scienceworks", photo:"互動展覽適合抓拍學生操作實驗的瞬間，大廳有自然採光，可以拍建築線條。", story:"位於 Spotswood，前身是墨爾本的抽水站，現轉型為互動科學博物館。" },
-    { name:"Williamstown", photo:"海港邊適合拍夕陽跟船隻剪影，退潮時的礁石步道也是取景好地方。", story:"墨爾本最早開發的港口城鎮之一，保留許多維多利亞時期海事建築。" },
+    { name:"Scienceworks", tagEn:"Where Curiosity Becomes Discovery", tagZh:"好奇心變成發現的地方",
+      zh:"科學工作坊（Scienceworks）位於墨爾本西區，自1992年開放至今，是維多利亞州數一數二的科學博物館。和傳統博物館不同，它鼓勵訪客成為主動的參與者——透過互動展覽親自動手測試想法、體驗科學概念。\n\n其中最受歡迎的是天文館，透過沉浸式節目探索夜空與人類在宇宙中的位置。",
+      en:"Located in Melbourne's western suburbs and open since 1992, Scienceworks is one of Victoria's leading science museums. Unlike traditional museums, it encourages visitors to become active participants — testing ideas and experiencing scientific concepts firsthand.\n\nOne of its most popular attractions is the planetarium.",
+      photo:"互動展覽適合抓拍學生操作實驗的瞬間，大廳有自然採光，可以拍建築線條。" },
+    { name:"Williamstown", tagEn:"Where Melbourne's Story Began", tagZh:"墨爾本故事開始的地方",
+      zh:"威廉斯敦（Williamstown）位於菲利普港灣畔，是維多利亞州最古老的聚落之一。19世紀初，來自世界各地的船隻由此進入港灣，帶來了塑造墨爾本未來的人群與物資——淘金熱時期，許多移民正是從這座港口第一次踏上澳洲的土地。\n\n如今，歷史建築與老碼頭依然能讓人一窺19世紀的生活樣貌，沿岸的咖啡館與公園也讓這裡成為在地人與遊客都喜愛的去處。",
+      en:"Located on Port Phillip Bay, Williamstown is one of Victoria's oldest settlements. In the early 19th century, ships from around the world entered the bay here, bringing the people and goods that helped shape Melbourne's future.\n\nToday, historic buildings and old piers still offer a glimpse into 19th-century life.",
+      photo:"海港邊適合拍夕陽跟船隻剪影，退潮時的礁石步道也是取景好地方。" },
   ],
   7: [
-    { name:"Hosier Lane", photo:"塗鴉每天都會更新，建議直式構圖把整面牆收進畫面，盡量避免拍到路人正臉。", story:"從 1990 年代開始，塗鴉藝術家在此輪番創作，現在是墨爾本官方認可的合法塗鴉巷弄。" },
-    { name:"NGV 維多利亞國家美術館", photo:"入口大廳的水牆很適合拍倒影，館內多個展廳挑高採光佳，適合拍建築線條。", story:"National Gallery of Victoria 創立於 1861 年，是澳洲歷史最悠久、收藏最豐富的美術館。" },
+    { name:"Hosier Lane", tagEn:"The Street That Never Stays the Same", tagZh:"永遠在變的一條巷子",
+      zh:"霍西爾巷（Hosier Lane）是墨爾本被拍照次數最多的地點之一——但和大多數地標不同，它從來不會一成不變。街頭藝術家從1990年代開始在這裡創作，新的壁畫不斷取代舊的，讓這條巷子成了一座沒有固定館藏的「活畫廊」。\n\n每次造訪都會看到不一樣的風景，而這種持續變化，正是霍西爾巷成為墨爾本創意與自我表達象徵的原因。",
+      en:"Hosier Lane is one of Melbourne's most photographed spots — and unlike most landmarks, it never stays the same. Street artists began using its walls in the 1990s, and new murals constantly replace old ones, turning the laneway into a living gallery.\n\nNo two visits are ever the same.",
+      photo:"塗鴉每天都會更新，建議直式構圖把整面牆收進畫面，盡量避免拍到路人正臉。" },
+    { name:"NGV 維多利亞國家美術館", tagEn:"Where Art Meets History", tagZh:"藝術與歷史相遇之處",
+      zh:"創立於1861年的維多利亞國家美術館（NGV），是澳洲歷史最悠久的公共美術館，館藏超過75,000件來自世界各地的藝術作品。入口處著名的水牆，是墨爾本最容易辨認的景觀之一。\n\nNGV的館藏橫跨數世紀的人類創造力，從古典繪畫到當代裝置藝術都有；館方經常舉辦大型國際特展，吸引全球訪客前來。",
+      en:"Founded in 1861, the National Gallery of Victoria is Australia's oldest public art museum, home to more than 75,000 artworks from around the world. Its famous water wall at the entrance is one of the most recognisable sights in Melbourne.\n\nNGV's collection spans centuries of human creativity, from classical paintings to contemporary installations.",
+      photo:"入口大廳的水牆很適合拍倒影，館內多個展廳挑高採光佳，適合拍建築線條。" },
   ],
   9: [
-    { name:"RMIT University", photo:"Storey Hall 色彩鮮豔的立面很好拍，建議仰角拍出建築的量體感。", story:"皇家墨爾本理工大學創立於 1887 年，以建築與設計科系聞名。" },
-    { name:"Melbourne Museum", photo:"中庭的森林展區挑高採光佳，適合拍人與展品互動的畫面。", story:"2000 年開幕，是南半球最大的博物館，館藏包含原住民文化與自然史。" },
+    { name:"RMIT University", tagEn:"Learning in the Heart of the City", tagZh:"在城市中心學習",
+      zh:"皇家墨爾本理工大學（RMIT）源起於1887年，是澳洲設計、科技與工程領域的頂尖學府之一。和許多傳統大學不同，它的校園直接融入墨爾本的市區街道，教育與城市生活比鄰而居。\n\nRMIT以實作學習聞名——學生透過真實專案與產業合作應用所學，畢業生遍及全球逾100個國家。",
+      en:"Tracing its roots to 1887, RMIT University is one of Australia's leading institutions for design, technology, and engineering. Unlike many traditional universities, its campus blends directly into Melbourne's city streets.\n\nRMIT is known for hands-on learning — students apply knowledge through real projects and industry partnerships.",
+      photo:"Storey Hall 色彩鮮豔的立面很好拍，建議仰角拍出建築的量體感。" },
+    { name:"Melbourne Museum", tagEn:"Preserving the Past, Inspiring the Future", tagZh:"保存過去，啟發未來",
+      zh:"墨爾本博物館於2000年開幕，是南半球規模最大的博物館，館藏橫跨自然史、科學與澳洲文化，從恐龍化石到原住民文物收藏應有盡有。\n\n館內最知名的特色之一，是「森林畫廊」（Forest Gallery）——一座重現維多利亞州生態系的室內活體森林。",
+      en:"Opened in 2000, Melbourne Museum is the largest museum in the Southern Hemisphere, home to millions of objects spanning natural history, science, and Australian culture.\n\nOne of its most famous features is the Forest Gallery, a living indoor forest recreating a Victorian ecosystem.",
+      photo:"中庭的森林展區挑高採光佳，適合拍人與展品互動的畫面。" },
   ],
 };
+
+// 不對應特定一天的延伸內容（來自同一份文件），顯示在頁面最下方
+const EXTRA_SPOTS = [
+  { name:"Victoria Street 維多利亞街", tagEn:"A Taste of Vietnam in Melbourne", tagZh:"墨爾本的越南味道",
+    zh:"位於列治文區（Richmond）的維多利亞街，是墨爾本越南社群的核心地帶。1970到1980年代間，許多越南家庭因越戰而移居澳洲，列治文因此成為維多利亞州最重要的越南文化中心之一。\n\n如今這條街以餐廳、麵包店與雜貨店聞名，傳統越南料理與現代澳洲風味並存。",
+    en:"Located in Richmond, Victoria Street is known as the heart of Melbourne's Vietnamese community. During the 1970s and 80s, many Vietnamese families arrived in Australia following the Vietnam War.\n\nToday the street is famous for its restaurants, bakeries, and grocery stores." },
+  { name:"澳洲超市與購物", tagEn:"Everyday Shopping Life in Australia", tagZh:"澳洲的日常購物生活",
+    zh:"對國際學生來說，到澳洲第一個驚喜通常是超市。Woolworths（暱稱「Woolies」）和Coles是澳洲兩大連鎖超市，幾乎每個郊區都找得到；德國折扣超市ALDI則以每週的「Special Buys」聞名——中間走道會出現各種意想不到的商品，賣完就沒有。\n\n還有Kmart：和美國的Kmart完全不同，澳洲的Kmart是超受歡迎的平價百貨，甚至成了在地人的玩笑哏——「本來只想買一樣東西，結果推了一整台購物車出來」。對預算有限、要佈置新房間的學生來說，Kmart（還有Target、Big W）通常是採購的第一站。",
+    en:"For international students, one of the first surprises in Australia is the supermarket. Woolworths (\"Woolies\") and Coles are the two biggest chains, while German discount chain ALDI is known for its weekly \"Special Buys.\"\n\nThen there's Kmart: a beloved discount department store, famous for the running joke of \"going in for one thing and leaving with a trolley full.\"" },
+];
 
 const today = taipeiToday();
 let currentIndex = DAYS.findIndex(d => d.date === today);
@@ -552,6 +615,53 @@ function planFields(d, index){
   return { place, am, pm, eve };
 }
 
+function renderSpot(s, i){
+  return `
+    <div class="spot" data-spot="${i}">
+      <button class="spot-header">
+        <span class="spot-header-text">${s.name}<span class="spot-tagline">${s.tagZh}　<span class="en">${s.tagEn}</span></span></span>
+        <span class="chev">⌄</span>
+      </button>
+      <div class="spot-body"><div class="spot-body-inner">
+        <div class="spot-block"><div class="spot-block-label">📖 景點故事</div><p>${s.zh}</p><p class="en">${s.en}</p></div>
+        ${s.photo ? `<div class="spot-block"><div class="spot-block-label">📷 拍攝手法</div><p>${s.photo}</p></div>` : ''}
+        <div class="spot-links">
+          <a href="${mapsLink(s.name)}" target="_blank" rel="noopener">📍 Google 地圖</a>
+          <a href="${transitLink(s.name)}" target="_blank" rel="noopener">🚌 大眾運輸路線</a>
+        </div>
+      </div></div>
+    </div>
+  `;
+}
+
+function wireAccordion(container){
+  container.querySelectorAll('.spot').forEach(el => {
+    el.querySelector('.spot-header').addEventListener('click', () => {
+      const body = el.querySelector('.spot-body');
+      const isOpen = el.classList.contains('open');
+      if (isOpen) {
+        body.style.maxHeight = '0px';
+        el.classList.remove('open');
+      } else {
+        el.classList.add('open');
+        body.style.maxHeight = body.scrollHeight + 'px';
+      }
+    });
+  });
+}
+
+function renderExtras(){
+  const el = document.getElementById('extrasSection');
+  if (!EXTRA_SPOTS.length) return;
+  el.innerHTML = `
+    <h3>延伸閱讀・墨爾本生活</h3>
+    <div class="sub">跟行程沒有綁定特定一天，但很適合先讀一讀的墨爾本小知識</div>
+    <div class="spot-list">
+      ${EXTRA_SPOTS.map((s, i) => renderSpot(s, i)).join('')}
+    </div>
+  `;
+  wireAccordion(el);
+}
 function renderCard(){
   const d = DAYS[selectedIndex];
   const f = planFields(d, selectedIndex);
@@ -564,21 +674,9 @@ function renderCard(){
   ` : '';
   const spots = SPOTS[selectedIndex] || [];
   const spotsHtml = spots.length ? `
-    <div class="spot-note">點景點名稱展開拍攝手法、景點故事跟快速連結</div>
+    <div class="spot-note">點景點名稱展開中英雙語景點故事、拍攝手法跟快速連結</div>
     <div class="spot-list">
-      ${spots.map((s, i) => `
-        <div class="spot" data-spot="${i}">
-          <button class="spot-header">${s.name}<span class="chev">⌄</span></button>
-          <div class="spot-body"><div class="spot-body-inner">
-            <div class="spot-block"><div class="spot-block-label">📷 拍攝手法</div><p>${s.photo}</p></div>
-            <div class="spot-block"><div class="spot-block-label">📖 景點故事</div><p>${s.story}</p></div>
-            <div class="spot-links">
-              <a href="${mapsLink(s.name)}" target="_blank" rel="noopener">📍 Google 地圖</a>
-              <a href="${transitLink(s.name)}" target="_blank" rel="noopener">🚌 大眾運輸路線</a>
-            </div>
-          </div></div>
-        </div>
-      `).join('')}
+      ${spots.map((s, i) => renderSpot(s, i)).join('')}
     </div>
   ` : '';
   card.innerHTML = `
@@ -617,11 +715,8 @@ function renderCard(){
       renderCard();
     });
   });
-  card.querySelectorAll('.spot').forEach(el => {
-    el.querySelector('.spot-header').addEventListener('click', () => {
-      el.classList.toggle('open');
-    });
-  });
+  card.querySelectorAll('.spot').forEach(el => el.classList.remove('open'));
+  wireAccordion(card);
   const prevBtn = card.querySelector('#prevDay');
   const nextBtn = card.querySelector('#nextDay');
   if (prevBtn) prevBtn.addEventListener('click', () => { if (selectedIndex > 0){ selectedIndex--; render(); } });
@@ -637,6 +732,7 @@ function render(){
 }
 
 render();
+renderExtras();
 </script>
 
 </body>
