@@ -490,38 +490,6 @@
     display:flex; align-items:center; justify-content:center;
   }
 
-  /* ---------- Task checklist ---------- */
-  .task-checklist{
-    margin: 0 22px 4px;
-    background: var(--bg);
-    border-radius: 10px;
-    padding: 12px 14px;
-  }
-  .task-checklist-head{
-    display:flex; align-items:center; justify-content:space-between;
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    letter-spacing: 0.04em;
-    color: var(--teal);
-    margin-bottom: 8px;
-  }
-  .task-progress{
-    background: var(--teal-soft);
-    color: var(--teal);
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-weight: 700;
-  }
-  .task-checklist ul{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:6px; }
-  .task-checklist label{
-    display:flex; align-items:center; gap:9px;
-    font-size: 13.5px; color: var(--ink);
-    cursor:pointer;
-  }
-  .task-checklist label.done{ color: var(--ink-muted); text-decoration: line-through; }
-  .task-checklist input[type="checkbox"]{ width:18px; height:18px; accent-color: var(--teal); flex-shrink:0; }
-  .task-checklist label .en{ font-size: 11.5px; color: var(--ink-muted); margin-left:4px; }
-
   /* ---------- Vocab search ---------- */
   .vocab-search{
     width:100%;
@@ -592,20 +560,6 @@ const FLIGHT_PLANS = {
 };
 let selectedPlan = 1;
 
-// 五大任務，來自《2026墨爾本城市探索營_整理版》
-const TASKS = [
-  { zh:"街頭英文採訪", en:"English street interview" },
-  { zh:"英文反思心得", en:"English reflection" },
-  { zh:"英文自錄影片", en:"Self-recorded video" },
-  { zh:"SDGs 議題反思", en:"SDGs reflection" },
-  { zh:"成果照片紀錄", en:"Photo documentation" },
-];
-const taskState = {}; // { [dayIndex]: [bool, bool, bool, bool, bool] }
-function getTaskState(dayIndex){
-  if (!taskState[dayIndex]) taskState[dayIndex] = TASKS.map(() => false);
-  return taskState[dayIndex];
-}
-
 const DAYS = [
   { date:"2026-07-13", wd:"一", place:"出發日", am:"行前準備", pm:"集合及機場報到", eve:"", flight:true, planToggle:true },
   { date:"2026-07-14", wd:"二", place:"", am:"", pm:"", eve:"機場接送、入住住宿地點、休息／Box Hill", flight:true, planToggle:true },
@@ -650,6 +604,7 @@ const SPOTS = {
         { zh:"你知道澳洲的首都是哪裡嗎？為什麼不是墨爾本？", en:"Do you know Australia's capital? Why isn't it Melbourne?" },
         { zh:"你對墨爾本的第一印象是什麼？", en:"What's your first impression of Melbourne?" },
         { zh:"🌍 SDG 11｜一個「全球最宜居城市」要具備哪些條件？台灣的城市呢？", en:"🌍 SDG 11｜What makes a city \"most liveable\"? How does a city in Taiwan compare?" },
+        { zh:"🌍 SDG 13｜墨爾本「一天四季」的氣候特色，跟氣候變遷有什麼關聯？", en:"🌍 SDG 13｜What might Melbourne's \"four seasons in one day\" have to do with climate change?" },
       ] },
   ],
   1: [
@@ -665,6 +620,7 @@ const SPOTS = {
         { zh:"為什麼一條河會決定一座城市的位置？", en:"Why would a river decide where a city is built?" },
         { zh:"Southbank 以前是工業區，現在是藝術文化區——你覺得這種轉變好不好？", en:"Southbank went from industrial zone to arts precinct — is that kind of transformation a good thing?" },
         { zh:"🌍 SDG 6｜河流的健康和一座城市的發展，要怎麼樣才能兼顧？", en:"🌍 SDG 6｜How can a city grow while still keeping its river healthy?" },
+        { zh:"🌍 SDG 11｜親水的公共空間，如何提升城市生活的品質？", en:"🌍 SDG 11｜How does access to waterfront public space improve quality of urban life?" },
       ] },
   ],
   2: [
@@ -685,6 +641,7 @@ const SPOTS = {
         { zh:"為什麼「在鐘底下見面」這個說法可以流傳100多年？台灣有沒有類似的約定地點？", en:"Why has \"meet me under the clocks\" lasted over 100 years? Does Taiwan have a similar meeting spot?" },
         { zh:"你覺得車站應該是什麼樣子？和台灣的火車站有什麼不同？", en:"What should a train station look like? How is this one different from stations in Taiwan?" },
         { zh:"🌍 SDG 11｜大眾運輸如何讓一座城市更永續、更公平？", en:"🌍 SDG 11｜How does public transport make a city more sustainable and fair for everyone?" },
+        { zh:"🌍 SDG 9｜150年前蓋的車站至今仍在使用，這代表什麼樣的基礎建設思維？", en:"🌍 SDG 9｜A station built 150 years ago is still in daily use — what does that say about how it was built?" },
       ] },
     { name:"Federation Square", tagEn:"The Square That Melbourne Once Hated", tagZh:"墨爾本曾經討厭的廣場",
       zh:"2002年開幕時，聯邦廣場並不是人人都喜歡——大膽前衛的設計和周圍的歷史建築格格不入，不少評論甚至說它醜，一度是澳洲最具爭議的建築案之一。\n\n但人們還是開始使用它：家庭在此聚會、藝術家在此表演、重大活動在此轉播。久而久之，它成了「墨爾本的客廳」，聚集了博物館、藝廊與各種節慶活動，也成為這座城市最容易辨認的地標之一。",
@@ -703,6 +660,7 @@ const SPOTS = {
         { zh:"你覺得 Federation Square 好看嗎？一個被大家說醜的設計，為什麼後來變成歷史遺產？", en:"Do you think Federation Square is beautiful? Why did a once-hated design later become a heritage site?" },
         { zh:"一個城市為什麼需要廣場？台灣有沒有類似的公共空間？", en:"Why does a city need a public square? Does Taiwan have a similar space?" },
         { zh:"🌍 SDG 11｜一個對所有人都友善的公共空間，會是什麼樣子？", en:"🌍 SDG 11｜What would a public space that's welcoming to everyone look like?" },
+        { zh:"🌍 SDG 16｜廣場作為集會、抗議、慶典的場所，對公民社會有什麼功能？", en:"🌍 SDG 16｜What role does a public square play in civic life — as a place for gathering, protest, and celebration?" },
       ] },
     { name:"ACMI 澳洲動態影像中心", tagEn:"Where Stories Come to Life", tagZh:"故事誕生的地方",
       zh:"位於聯邦廣場內的ACMI（澳洲動態影像中心），是澳洲的國家級螢幕文化博物館，探討人類如何透過動態影像說故事——從早期電影、電視，到電玩遊戲、動畫與社群媒體都在其中。\n\n館內可以認識電影製作的歷史、了解視覺特效如何完成，還有許多互動展覽揭露現代媒體背後的創作過程。ACMI提醒我們：科技一直在變，但人類想說故事的渴望始終不變。",
@@ -721,6 +679,7 @@ const SPOTS = {
         { zh:"電影、電玩、社群媒體——這些影像如何改變了你的日常生活？", en:"Film, games, social media — how have moving images changed your daily life?" },
         { zh:"如果你也拿到 The Lens，你會想收藏哪一件展品？為什麼？", en:"If you had The Lens, which exhibit would you collect — and why?" },
         { zh:"🌍 SDG 4｜科技和媒體可以怎麼被用來，讓更多不同的聲音被『看見』？", en:"🌍 SDG 4｜How can technology and media help more diverse voices be seen and heard?" },
+        { zh:"🌍 SDG 9｜科技與創新如何被用來保存、傳遞一座城市的文化？", en:"🌍 SDG 9｜How can technology and innovation help preserve and pass on a city's culture?" },
       ] },
   ],
   3: [
@@ -742,6 +701,7 @@ const SPOTS = {
         { zh:"你覺得在數位時代，實體市場還有存在的意義嗎？", en:"In the digital age, do physical markets still matter?" },
         { zh:"市場蓋在舊公墓上——如果你當時知道這件事，還會想逛這裡嗎？", en:"The market was built over an old cemetery — if you'd known that going in, would it change how you feel about visiting?" },
         { zh:"🌍 SDG 12｜在市場買東西，跟在網路上買東西，對環境的影響有什麼不同？", en:"🌍 SDG 12｜How does buying from a market differ from buying online, in terms of environmental impact?" },
+        { zh:"🌍 SDG 2｜傳統市場的食物供應鏈，和超市有什麼不同？哪一種比較貼近產地？", en:"🌍 SDG 2｜How does a traditional market's food supply chain differ from a supermarket's? Which feels closer to the source?" },
       ] },
     { name:"State Library of Victoria", tagEn:"The Library Built for Everyone", tagZh:"為所有人而建的圖書館",
       zh:"維多利亞州立圖書館成立於1854年，是澳洲歷史最悠久的公共圖書館之一，也是全世界最早的免費公共圖書館之一。從創立之初，它的使命就很簡單：讓每個人都能自由取得知識。\n\n館內最著名的空間是1913年啟用、八角形設計的拉籌伯閱覽室（La Trobe Reading Room），曾是全球最大的閱覽室之一。超過170年後的今天，館內仍收藏數百萬冊書籍、照片與手稿。",
@@ -761,6 +721,7 @@ const SPOTS = {
         { zh:"公共圖書館對一座城市有什麼意義？", en:"What does a public library mean for a city?" },
         { zh:"Ned Kelly——罪犯還是英雄？你覺得呢？", en:"Ned Kelly — criminal or hero? What do you think?" },
         { zh:"🌍 SDG 4｜免費的公共圖書館，對教育公平有什麼意義？", en:"🌍 SDG 4｜What does a free public library mean for equal access to education?" },
+        { zh:"🌍 SDG 10｜一個對所有人免費開放的空間，如何縮小社會資源的落差？", en:"🌍 SDG 10｜How can a space that's free and open to everyone help narrow social inequality?" },
       ] },
   ],
   4: [
@@ -781,6 +742,7 @@ const SPOTS = {
         { zh:"如果你可以來這裡念書，你會念什麼？", en:"If you could study here, what would you study?" },
         { zh:"一張頂尖大學的文憑，和一個頂尖的職業技能——你覺得哪個更有價值？", en:"A degree from a top university, or a top-tier trade skill — which do you think is more valuable?" },
         { zh:"🌍 SDG 4｜教育機會的不平等，你覺得可以怎麼被改善？", en:"🌍 SDG 4｜How do you think unequal access to education could be improved?" },
+        { zh:"🌍 SDG 5｜大學教育曾經不對女性開放，這段歷史帶給你什麼啟發？", en:"🌍 SDG 5｜Universities once excluded women entirely — what does that history teach you?" },
       ] },
     { name:"Lygon Street", tagEn:"The Street That Brought Italy to Melbourne", tagZh:"把義大利帶到墨爾本的一條街",
       zh:"位於卡爾頓區的萊貢街（Lygon Street）有「小義大利」之稱，以咖啡館、餐廳與義式冰淇淋聞名。但它的故事要從二戰後說起——當時大批義大利移民定居墨爾本，開設家族經營的咖啡館與餐廳，代代相傳著傳統食譜。\n\n早在世界各地流行精品咖啡之前，義大利移民就已經把濃縮咖啡機和咖啡館文化帶到這裡——不少歷史學家認為，萊貢街正是墨爾本知名咖啡文化的發源地。",
@@ -799,6 +761,7 @@ const SPOTS = {
         { zh:"移民帶來的文化如何改變了一座城市？", en:"How does the culture immigrants bring change a city?" },
         { zh:"如果你的家族移民到其他國家，你希望保留什麼文化？", en:"If your family emigrated, what part of your culture would you want to keep?" },
         { zh:"🌍 SDG 10｜一個社會要怎麼樣，才能讓移民感覺『被接納』？這讓你想到自己生活中類似的經驗嗎？", en:"🌍 SDG 10｜What makes a society feel welcoming to immigrants? Does this remind you of a similar experience of your own?" },
+        { zh:"🌍 SDG 8｜移民創業如何為當地創造新的就業機會？", en:"🌍 SDG 8｜How does immigrant entrepreneurship create new jobs in a local economy?" },
       ] },
   ],
   5: [
@@ -819,6 +782,7 @@ const SPOTS = {
         { zh:"你覺得科學和日常生活有什麼關係？", en:"What's the connection between science and everyday life?" },
         { zh:"你選了哪個展品？試著用最簡單的方式解釋給別人聽", en:"Which exhibit did you pick? Try explaining it to someone as simply as possible" },
         { zh:"🌍 SDG 9｜要怎麼樣才能讓每個孩子，不分背景，都有機會接觸好的科學教育？", en:"🌍 SDG 9｜How can every child, regardless of background, get access to good science education?" },
+        { zh:"🌍 SDG 10｜免費或低價的科學教育資源，如何縮小城鄉或貧富之間的學習落差？", en:"🌍 SDG 10｜How can free or low-cost science resources narrow the learning gap between rich and poor, city and country?" },
       ] },
     { name:"Williamstown", tagEn:"Where Melbourne's Story Began", tagZh:"墨爾本故事開始的地方",
       zh:"威廉斯敦（Williamstown）位於菲利普港灣畔，是維多利亞州最古老的聚落之一。19世紀初，來自世界各地的船隻由此進入港灣，帶來了塑造墨爾本未來的人群與物資——淘金熱時期，許多移民正是從這座港口第一次踏上澳洲的土地。\n\n如今，歷史建築與老碼頭依然能讓人一窺19世紀的生活樣貌，沿岸的咖啡館與公園也讓這裡成為在地人與遊客都喜愛的去處。",
@@ -837,6 +801,7 @@ const SPOTS = {
         { zh:"為什麼「被忽略」反而保護了 Williamstown 的歷史建築？", en:"Why did being \"overlooked\" end up protecting Williamstown's historic buildings?" },
         { zh:"站在這裡看 CBD 的感覺，和站在 CBD 看這裡有什麼不同？", en:"How does looking at the CBD from here feel different from looking at here from the CBD?" },
         { zh:"🌍 SDG 11｜歷史保存和城市發展，要怎麼樣才能兩者兼顧？", en:"🌍 SDG 11｜How can a city balance historic preservation with development?" },
+        { zh:"🌍 SDG 14｜港口城鎮的長期發展，對海洋生態帶來什麼樣的影響？", en:"🌍 SDG 14｜What long-term impact does a port town's development have on marine ecosystems?" },
       ] },
   ],
   6: [
@@ -857,6 +822,7 @@ const SPOTS = {
         { zh:"為什麼有些老建築能夠存活150年而不被拆掉？", en:"Why do some 150-year-old buildings survive instead of being torn down?" },
         { zh:"「室內購物街」這個概念，在今天有什麼不同的形式？", en:"The idea of an \"indoor shopping street\" — what forms does it take today?" },
         { zh:"🌍 SDG 11｜老建築被保留下來，對一個社區的認同感有什麼幫助？", en:"🌍 SDG 11｜How does preserving old buildings help a community's sense of identity?" },
+        { zh:"🌍 SDG 8｜一家百年老店能撐這麼久，靠的是什麼樣的勞動與經營模式？", en:"🌍 SDG 8｜What kind of work and business model lets a shop survive for over a century?" },
       ] },
   ],
   7: [
@@ -878,6 +844,7 @@ const SPOTS = {
         { zh:"你覺得街頭塗鴉算是藝術嗎？在什麼條件下算、什麼條件下不算？", en:"Is street graffiti art? Under what conditions does it count — or not?" },
         { zh:"如果你可以在這裡留下一件作品，你想表達什麼？", en:"If you could leave a piece here, what would you want to say?" },
         { zh:"🌍 SDG 16｜街頭藝術是一種發聲的方式嗎？誰的聲音容易被聽見，誰的不容易？", en:"🌍 SDG 16｜Is street art a way of having a voice? Whose voices get heard easily, and whose don't?" },
+        { zh:"🌍 SDG 11｜把塗鴉合法化，對城市治理來說是一種什麼樣的嘗試？", en:"🌍 SDG 11｜Legalising a graffiti laneway — what kind of experiment in city governance is that?" },
       ] },
     { name:"NGV 維多利亞國家美術館", tagEn:"Where Art Meets History", tagZh:"藝術與歷史相遇之處",
       zh:"創立於1861年的維多利亞國家美術館（NGV），是澳洲歷史最悠久的公共美術館，館藏超過75,000件來自世界各地的藝術作品。入口處著名的水牆，是墨爾本最容易辨認的景觀之一。\n\nNGV的館藏橫跨數世紀的人類創造力，從古典繪畫到當代裝置藝術都有；館方經常舉辦大型國際特展，吸引全球訪客前來。",
@@ -896,6 +863,7 @@ const SPOTS = {
         { zh:"你選了哪件作品？為什麼是它讓你停下腳步？", en:"Which work did you choose? Why did it make you stop?" },
         { zh:"美術館裡的藝術和 Hosier Lane 的街頭藝術，哪個對你的影響更大？", en:"Which affects you more — the art in a gallery, or the street art at Hosier Lane?" },
         { zh:"🌍 SDG 4｜藝術可以如何幫助我們理解自己不熟悉的觀點？", en:"🌍 SDG 4｜How can art help us understand perspectives unfamiliar to us?" },
+        { zh:"🌍 SDG 10｜美術館免費開放，對哪些人的幫助最大？", en:"🌍 SDG 10｜Who benefits most from a gallery being free to enter?" },
       ] },
   ],
   8: [
@@ -911,6 +879,7 @@ const SPOTS = {
         { zh:"「在工廠學習」和「在教室學習」有什麼根本的不同？", en:"What's the fundamental difference between learning in a factory and learning in a classroom?" },
         { zh:"你會考慮走技職路線嗎？為什麼？", en:"Would you consider a vocational path? Why or why not?" },
         { zh:"🌍 SDG 8｜『尊嚴勞動』對你來說是什麼意思？你希望未來的工作是什麼樣子？", en:"🌍 SDG 8｜What does \"decent work\" mean to you? What would you want your future job to look like?" },
+        { zh:"🌍 SDG 4｜技職資格能否跟大學學分互相抵免，這件事重要嗎？為什麼？", en:"🌍 SDG 4｜Does it matter whether vocational qualifications can transfer into university credit? Why?" },
       ] },
     { name:"Victoria Street 越南街", tagEn:"A Taste of Vietnam in Melbourne", tagZh:"墨爾本的越南味道",
       zh:"維多利亞街位於列治文區（Richmond），是墨爾本越南社群的核心地帶。1975年西貢淪陷後，大量越南難民逃離家園，許多人以船民身分抵達澳洲並定居於此，在這條街上開餐廳、雜貨店，白手起家建立起社區。\n\n如今這條街有超過60家越南餐廳，是墨爾本最著名的飲食文化街之一。招牌料理包括 Pho（河粉）、Banh Mi（法越三明治，源自法國殖民越南時期的飲食融合）與 Goi Cuon（春捲）。",
@@ -924,6 +893,7 @@ const SPOTS = {
         { zh:"食物如何成為文化保存的方式？", en:"How does food become a way of preserving culture?" },
         { zh:"如果你的家族必須離開台灣，你會去哪裡？你最想保留什麼？", en:"If your family had to leave Taiwan, where would you go — and what would you most want to keep?" },
         { zh:"🌍 SDG 10｜難民與移民為城市帶來了什麼？我們可以怎麼樣讓他們更容易融入？", en:"🌍 SDG 10｜What do refugees and immigrants bring to a city? How can we help them feel more welcome?" },
+        { zh:"🌍 SDG 2｜食物如何連結起一個離散社群與家鄉的記憶？", en:"🌍 SDG 2｜How does food connect a diaspora community back to memories of home?" },
       ] },
   ],
   9: [
@@ -945,6 +915,7 @@ const SPOTS = {
         { zh:"RMIT 從工人夜校到世界前200大——這個轉變對你來說代表什麼？", en:"RMIT went from a night school for workers to a top-200 university — what does that transformation mean to you?" },
         { zh:"大學和技職學校的邊界正在模糊，你覺得這是好事嗎？", en:"The line between university and vocational school is blurring — do you think that's a good thing?" },
         { zh:"🌍 SDG 8｜教育和就業之間的距離，要怎麼樣才能縮短？", en:"🌍 SDG 8｜How can the gap between education and employment be narrowed?" },
+        { zh:"🌍 SDG 9｜AI 與機器人技術的教育，會如何影響未來的產業型態？", en:"🌍 SDG 9｜How might education in AI and robotics shape the industries of the future?" },
       ] },
     { name:"Melbourne Museum", tagEn:"Preserving the Past, Inspiring the Future", tagZh:"保存過去，啟發未來",
       zh:"墨爾本博物館於2000年開幕，是南半球規模最大的博物館，館藏橫跨自然史、科學與澳洲文化，從恐龍化石到原住民文物收藏應有盡有。\n\n館內最知名的特色之一，是「森林畫廊」（Forest Gallery）——一座重現維多利亞州生態系的室內活體森林。",
@@ -964,6 +935,7 @@ const SPOTS = {
         { zh:"為什麼一匹馬可以成為一個國家的英雄？", en:"Why can a horse become a national hero?" },
         { zh:"看到2,000年前的文物，你有什麼感覺？", en:"How do you feel standing in front of an artefact that's 2,000 years old?" },
         { zh:"🌍 SDG 15｜保存自然史和文化資產，對下一代有什麼意義？", en:"🌍 SDG 15｜What does preserving natural history and cultural heritage mean for future generations?" },
+        { zh:"🌍 SDG 4｜博物館的教育功能，跟學校教育有什麼不同？", en:"🌍 SDG 4｜How is a museum's role in education different from a school's?" },
       ] },
   ],
   10: [
@@ -979,6 +951,7 @@ const SPOTS = {
         { zh:"如果技職薪資和大學畢業生差不多，你還會堅持念大學嗎？為什麼？", en:"If trade salaries rival university graduate salaries, would you still insist on going to university? Why?" },
         { zh:"「蓋了拆了再蓋」的學習方式，你覺得有效嗎？哪些領域可以應用這個概念？", en:"Does \"build, demolish, rebuild\" seem like an effective way to learn? What other fields could use this approach?" },
         { zh:"🌍 SDG 8｜技職教育被重視的程度，反映了社會對『勞動』的什麼態度？", en:"🌍 SDG 8｜How much a society values vocational education reflects what attitude toward labour?" },
+        { zh:"🌍 SDG 9｜模組化、預製建築技術，對未來的營建產業會帶來什麼改變？", en:"🌍 SDG 9｜How might modular, prefabricated construction change the building industry of the future?" },
       ] },
   ],
 };
@@ -1308,19 +1281,6 @@ function renderCard(){
     <div class="plan-note">機票尚未確定，以下先依你選擇的方案顯示，兩案回程航班相同（CI58）</div>
   ` : '';
   const spots = SPOTS[selectedIndex] || [];
-  const showTasks = selectedIndex >= 2 && selectedIndex <= 10;
-  const state = showTasks ? getTaskState(selectedIndex) : null;
-  const doneCount = state ? state.filter(Boolean).length : 0;
-  const taskHtml = showTasks ? `
-    <div class="task-checklist">
-      <div class="task-checklist-head"><span>✅ 今日任務 · TODAY'S TASKS</span><span class="task-progress">${doneCount}/${TASKS.length}</span></div>
-      <ul>
-        ${TASKS.map((t, i) => `
-          <li><label class="${state[i] ? 'done' : ''}"><input type="checkbox" data-task="${i}" ${state[i] ? 'checked' : ''}>${t.zh}<span class="en">${t.en}</span></label></li>
-        `).join('')}
-      </ul>
-    </div>
-  ` : '';
   const spotsHtml = spots.length ? `
     <div class="spot-note">點景點名稱展開中英雙語景點故事、小知識、拍攝手法、想一想跟快速連結</div>
     <div class="spot-list">
@@ -1357,7 +1317,6 @@ function renderCard(){
         </div>
       </div>
     </div>
-    ${taskHtml}
     ${d.flight ? `<div style="padding:0 22px 20px;"><div class="banner flight">✈️ 今天有搭機行程，請提前確認證件與行李</div></div>` : ``}
     ${spotsHtml}
     <div style="padding: 4px 22px 22px;">
@@ -1375,17 +1334,6 @@ function renderCard(){
   });
   card.querySelectorAll('.spot').forEach(el => el.classList.remove('open'));
   wireAccordion(card);
-  card.querySelectorAll('.task-checklist input[type="checkbox"]').forEach(cb => {
-    cb.addEventListener('change', () => {
-      const i = parseInt(cb.dataset.task);
-      const s = getTaskState(selectedIndex);
-      s[i] = cb.checked;
-      cb.closest('label').classList.toggle('done', cb.checked);
-      const done = s.filter(Boolean).length;
-      const badge = card.querySelector('.task-progress');
-      if (badge) badge.textContent = `${done}/${TASKS.length}`;
-    });
-  });
   const prevBtn = card.querySelector('#prevDay');
   const nextBtn = card.querySelector('#nextDay');
   if (prevBtn) prevBtn.addEventListener('click', () => { if (selectedIndex > 0){ selectedIndex--; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
