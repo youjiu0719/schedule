@@ -189,25 +189,46 @@
     font-size: 13.5px;
   }
 
-  .segments{ padding: 6px 22px 22px; }
-  .segment{
+  .timeline{ padding: 14px 22px 20px; position:relative; }
+  .timeline::before{
+    content:"";
+    position:absolute;
+    left: 39px;
+    top: 20px; bottom: 28px;
+    width: 2px;
+    background: var(--line);
+    z-index: 0;
+  }
+  .timeline-item{
+    position:relative;
+    z-index: 1;
     display:flex; gap: 14px;
-    padding: 16px 0;
-    border-bottom: 1px solid #F0F2EF;
+    padding-bottom: 22px;
   }
-  .segment:last-child{ border-bottom:none; }
-  .segment-label{
-    flex: 0 0 62px;
+  .timeline-item:last-child{ padding-bottom: 0; }
+  .timeline-marker{
+    flex: 0 0 34px;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 15px;
+  }
+  .timeline-item.am .timeline-marker{ border-color: var(--gold); }
+  .timeline-item.pm .timeline-marker{ border-color: var(--teal); }
+  .timeline-item.eve .timeline-marker{ border-color: var(--brick); }
+  .timeline-content{ flex:1; padding-top: 3px; }
+  .timeline-label{
     font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--ink-muted);
-    padding-top: 2px;
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
   }
-  .segment-label .icon{ display:block; font-size: 17px; margin-bottom:4px; }
-  .segment-body{ flex:1; font-size: 15px; color: var(--ink); }
-  .segment.am .segment-label{ color: var(--gold); }
-  .segment.pm .segment-label{ color: var(--teal); }
-  .segment.eve .segment-label{ color: var(--brick); }
+  .timeline-item.am .timeline-label{ color: var(--gold); }
+  .timeline-item.pm .timeline-label{ color: var(--teal); }
+  .timeline-item.eve .timeline-label{ color: var(--brick); }
+  .timeline-text{ font-size: 15px; color: var(--ink); }
 
   .banner{
     margin-top: 14px;
@@ -294,12 +315,10 @@
 
     .day-card-head{ padding: 18px 18px 14px; }
     .day-card-head h2{ font-size: 20px; }
-    .segments{ padding: 4px 18px 18px; }
-
-    .segment{ flex-direction: column; gap: 4px; padding: 14px 0; }
-    .segment-label{ flex-direction: row; align-items:center; gap:6px; }
-    .segment-label .icon{ display:inline; margin-bottom:0; font-size: 15px; }
-    .segment-body{ font-size: 16px; }
+    .timeline{ padding: 12px 18px 16px; }
+    .timeline::before{ left: 35px; }
+    .timeline-marker{ flex-basis: 30px; width:30px; height:30px; font-size:14px; }
+    .timeline-text{ font-size: 16px; }
 
     .plan-toggle{ padding: 0 18px 4px; }
     .plan-pill{ padding: 9px 14px; font-size: 12.5px; min-height: 40px; }
@@ -364,6 +383,26 @@
   .extras{ margin-top: 22px; }
   .extras h3{ font-family: var(--font-display); font-size: 16px; margin: 0 0 4px; }
   .extras .sub{ font-size: 12.5px; color: var(--ink-muted); margin-bottom: 12px; }
+
+  .tip-list{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .tip-list li{
+    display:flex; gap:8px;
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 8px 10px;
+  }
+  .tip-list li .tip-num{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--teal);
+    flex-shrink:0;
+    padding-top: 1px;
+  }
+  .tip-list li .tip-text{ font-size: 13.3px; color: var(--ink); }
+  .tip-list li .tip-text .en{ display:block; font-size: 12px; color: var(--ink-muted); font-style: italic; margin-top: 2px; }
+  .tip-list.facts li .tip-num{ color: var(--gold); }
+  .tip-list.think li{ background: var(--teal-soft); }
+  .tip-list.think li .tip-num{ color: var(--teal); }
   .spot-links{ display:flex; gap:8px; flex-wrap:wrap; }
   .spot-links a{
     font-family: var(--font-mono);
@@ -402,11 +441,107 @@
   }
   .day-nav button:disabled{ opacity: 0.35; cursor:default; }
   .day-nav button.primary{ background: var(--teal); border-color: var(--teal); color:#fff; }
+
+  /* ---------- Vocabulary + phrasebook ---------- */
+  .term-list{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:6px; }
+  .term-list li{
+    display:grid; grid-template-columns: 1fr 1fr;
+    gap: 2px 10px;
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 8px 10px;
+  }
+  .term-list .term-en{ font-family: var(--font-mono); font-weight:600; font-size: 12.5px; color: var(--ink); }
+  .term-list .term-zh{ font-size: 13px; color: var(--ink); text-align:right; }
+  .term-list .term-note{ grid-column: 1 / -1; font-size: 11.3px; color: var(--ink-muted); margin-top:2px; }
+
+  .phrase-list{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:7px; }
+  .phrase-list li{
+    background: var(--teal-soft);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13.3px;
+    color: var(--ink);
+    font-family: var(--font-mono);
+  }
+
+  /* ---------- Dark mode ---------- */
+  body.dark-mode{
+    --bg: #141F1B;
+    --bg-alt: #1A2622;
+    --surface: #1D2925;
+    --ink: #E7EDE9;
+    --ink-muted: #94A69F;
+    --line: #30423C;
+    --gold-soft: #3A2E17;
+    --teal-soft: #1C2F28;
+    --brick-soft: #3A241D;
+  }
+  body.dark-mode .day-card{ box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+  .theme-toggle{
+    position: absolute; top: 18px; right: 18px;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.08);
+    color: #F3F1EA;
+    font-size: 16px;
+    cursor: pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  /* ---------- Task checklist ---------- */
+  .task-checklist{
+    margin: 0 22px 4px;
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .task-checklist-head{
+    display:flex; align-items:center; justify-content:space-between;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: var(--teal);
+    margin-bottom: 8px;
+  }
+  .task-progress{
+    background: var(--teal-soft);
+    color: var(--teal);
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 700;
+  }
+  .task-checklist ul{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:6px; }
+  .task-checklist label{
+    display:flex; align-items:center; gap:9px;
+    font-size: 13.5px; color: var(--ink);
+    cursor:pointer;
+  }
+  .task-checklist label.done{ color: var(--ink-muted); text-decoration: line-through; }
+  .task-checklist input[type="checkbox"]{ width:18px; height:18px; accent-color: var(--teal); flex-shrink:0; }
+  .task-checklist label .en{ font-size: 11.5px; color: var(--ink-muted); margin-left:4px; }
+
+  /* ---------- Vocab search ---------- */
+  .vocab-search{
+    width:100%;
+    box-sizing: border-box;
+    font-family: var(--font-body);
+    font-size: 14px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .vocab-empty{ font-size: 12.5px; color: var(--ink-muted); padding: 8px 2px; }
 </style>
 </head>
 <body>
 
 <header class="hero">
+  <button class="theme-toggle" id="themeToggle" aria-label="切換深色模式">🌙</button>
   <div class="eyebrow">DA LI STUDY · MELBOURNE 2026</div>
   <h1>墨爾本國際學生交流團</h1>
   <p class="hero-sub">2026/07/13 — 2026/07/25 ・ 住宿地：Box Hill</p>
@@ -436,6 +571,8 @@
   </div>
 
   <div class="extras" id="extrasSection"></div>
+  <div class="extras" id="vocabSection"></div>
+  <div class="extras" id="interviewSection"></div>
 </main>
 
 <footer>行程若有異動，以帶隊老師現場公告為準</footer>
@@ -455,18 +592,32 @@ const FLIGHT_PLANS = {
 };
 let selectedPlan = 1;
 
+// 五大任務，來自《2026墨爾本城市探索營_整理版》
+const TASKS = [
+  { zh:"街頭英文採訪", en:"English street interview" },
+  { zh:"英文反思心得", en:"English reflection" },
+  { zh:"英文自錄影片", en:"Self-recorded video" },
+  { zh:"SDGs 議題反思", en:"SDGs reflection" },
+  { zh:"成果照片紀錄", en:"Photo documentation" },
+];
+const taskState = {}; // { [dayIndex]: [bool, bool, bool, bool, bool] }
+function getTaskState(dayIndex){
+  if (!taskState[dayIndex]) taskState[dayIndex] = TASKS.map(() => false);
+  return taskState[dayIndex];
+}
+
 const DAYS = [
   { date:"2026-07-13", wd:"一", place:"出發日", am:"行前準備", pm:"集合及機場報到", eve:"", flight:true, planToggle:true },
   { date:"2026-07-14", wd:"二", place:"", am:"", pm:"", eve:"機場接送、入住住宿地點、休息／Box Hill", flight:true, planToggle:true },
   { date:"2026-07-15", wd:"三", place:"墨爾本市區", am:"Flinders Street Station、墨爾本市區交通探索", pm:"Federation Square、ACMI 澳洲動態影像中心", eve:"學習紀錄及活動整理／Box Hill" },
   { date:"2026-07-16", wd:"四", place:"墨爾本市區", am:"Queen Victoria Market 維多利亞女王市場", pm:"State Library of Victoria 維多利亞州立圖書館", eve:"學習紀錄及活動整理／Box Hill" },
-  { date:"2026-07-17", wd:"五", place:"大學參訪／動物園", am:"University of Melbourne 墨爾本大學", pm:"Lygon Street 小義大利、Melbourne Zoo 墨爾本動物園", eve:"學習紀錄及活動整理／Box Hill" },
+  { date:"2026-07-17", wd:"五", place:"大學參訪／小義大利", am:"University of Melbourne 墨爾本大學", pm:"Lygon Street 小義大利", eve:"學習紀錄及活動整理／Box Hill" },
   { date:"2026-07-18", wd:"六", place:"科學博物館／海港", am:"Scienceworks 科學博物館", pm:"Williamstown 海港地區探索", eve:"學習紀錄及活動整理／Box Hill" },
-  { date:"2026-07-19", wd:"日", place:"自由探索日", am:"墨爾本市區探索", pm:"拍攝素材及學習成果整理", eve:"團體交流及內容檢視／Box Hill" },
+  { date:"2026-07-19", wd:"日", place:"自由探索日", am:"Royal Arcade 皇家拱廊、墨爾本市區探索", pm:"拍攝素材及學習成果整理", eve:"團體交流及內容檢視／Box Hill" },
   { date:"2026-07-20", wd:"一", place:"街頭藝術／美術館", am:"Hosier Lane 塗鴉街及城市藝術探索", pm:"NGV 維多利亞國家美術館", eve:"學習紀錄及活動整理／Box Hill" },
-  { date:"2026-07-21", wd:"二", place:"餐旅職涯體驗", am:"Hospitality 餐旅產業及職涯探索", pm:"餐旅實務體驗活動", eve:"學習紀錄及活動整理／Box Hill" },
+  { date:"2026-07-21", wd:"二", place:"餐旅職涯體驗", am:"GET Education Alpha 工廠（餐旅實習場）職涯探索", pm:"Victoria Street 越南街、餐旅實務體驗活動", eve:"學習紀錄及活動整理／Box Hill" },
   { date:"2026-07-22", wd:"三", place:"大學參訪／博物館", am:"RMIT University 皇家墨爾本理工大學", pm:"Melbourne Museum 墨爾本博物館", eve:"學習紀錄及活動整理／Box Hill" },
-  { date:"2026-07-23", wd:"四", place:"職涯體驗日", am:"木工實務探索", pm:"建築工程及職涯體驗", eve:"成果整理及返程準備／Box Hill" },
+  { date:"2026-07-23", wd:"四", place:"職涯體驗日", am:"GET Education Alpha 工廠（木工＋建築工程）", pm:"建築工程及職涯體驗", eve:"成果整理及返程準備／Box Hill" },
   { date:"2026-07-24", wd:"五", place:"返程日", am:"學習成果整理及發表準備", pm:"成果分享、行李整理及前往機場", eve:"21:50 自墨爾本機場搭機返台，搭乘中華航空 CI58（直飛），夜宿機上", flight:true },
   { date:"2026-07-25", wd:"六", place:"抵達台灣", am:"約 05:15 抵達桃園國際機場（CI58）", pm:"解散返家", eve:"—", flight:true },
 ];
@@ -484,87 +635,562 @@ function transitLink(name){
   return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(ACCOM_ADDRESS)}&destination=${encodeURIComponent(name + ' Melbourne')}&travelmode=transit`;
 }
 
-// 內容改寫自你提供的 Melbourne Story Series 文件（英文原文 + 中文翻譯），拍攝手法為額外補充建議
+// 內容整理自 Melbourne Story Series 與《大理老師備課手冊》，拍攝手法為額外補充建議
 const SPOTS = {
+  0: [
+    { name:"墨爾本城市介紹", tagEn:"About Melbourne", tagZh:"飛機上的墨爾本入門課",
+      zh:"墨爾本是澳洲維多利亞州的首府，也是澳洲第二大城市，人口約500萬。它曾經是澳洲的首都——1901年澳洲聯邦成立時，雪梨和墨爾本都搶著當首都，最後妥協在兩者之間蓋了坎培拉，但墨爾本在1927年之前一直是實際的聯邦首都。\n\n墨爾本以「全球最宜居城市」聞名，連續多年被評為全球前三。它的多元文化特色非常強烈——全市說超過200種語言，有希臘城、義大利街、越南街、唐人街。7月是澳洲冬季，氣溫約8–14°C，墨爾本人說「一天四季」是真的，可能早上出門穿羽絨，下午就出太陽了。",
+      en:"Melbourne is the capital of Victoria, and Australia's second-largest city with about five million people. It was actually Australia's first capital — when Sydney and Melbourne both wanted the honour in 1901, the compromise was to build a brand-new city, Canberra, between them. Melbourne ran the country until Canberra was ready in 1927.\n\nMelbourne is famous as one of the world's most liveable cities and is incredibly multicultural, with people speaking over 200 languages. July is Australia's winter — expect 8–14°C and the local saying \"four seasons in one day.\"",
+      facts:[
+        { zh:"墨爾本曾是澳洲首都（1901–1927），後來才蓋了坎培拉", en:"Melbourne was Australia's capital from 1901–1927, before Canberra was built" },
+        { zh:"全市說超過200種語言，是澳洲最多元文化的城市之一", en:"Over 200 languages are spoken across the city" },
+        { zh:"7月是冬季，氣溫約8–14°C，早晚溫差大", en:"July is winter — expect 8–14°C with big swings between morning and afternoon" },
+      ],
+      think:[
+        { zh:"你知道澳洲的首都是哪裡嗎？為什麼不是墨爾本？", en:"Do you know Australia's capital? Why isn't it Melbourne?" },
+        { zh:"你對墨爾本的第一印象是什麼？", en:"What's your first impression of Melbourne?" },
+        { zh:"🌍 SDG 11｜一個「全球最宜居城市」要具備哪些條件？台灣的城市呢？", en:"🌍 SDG 11｜What makes a city \"most liveable\"? How does a city in Taiwan compare?" },
+      ] },
+  ],
+  1: [
+    { name:"Southbank + Yarra River", tagEn:"The River That Decided Where Melbourne Would Be", tagZh:"決定墨爾本位置的一條河",
+      zh:"亞拉河（Yarra River）是墨爾本的靈魂——這條河決定了城市的位置。1835年，John Batman 探勘此地，在河的入海口附近發現一個天然淡水源，讓大型船隻能從鹹水開進淡水補給，墨爾本就這樣被選定了。\n\nSouthbank 意思是「河的南岸」，以前是造船廠、釀酒廠、倉庫聚集的工業區，1990年代開始大規模改造，變成現在的文化藝術區。亞拉河的水呈咖啡色，在地笑話說「這是世界唯一向上流的河」，真正原因是流域黏土顆粒懸浮水中，歐洲人到來前其實是清澈的。",
+      en:"The Yarra River is the reason Melbourne exists. In 1835, explorer John Batman found a natural freshwater source right where the river meets the bay — the perfect stopping point for ships arriving from the ocean.\n\nSouthbank used to be an industrial zone of factories, breweries, and warehouses. In the 1990s the city transformed it into today's arts and culture precinct. Locals joke the muddy Yarra is \"the only river that flows upside down\" — the real cause is clay sediment, not pollution.",
+      facts:[
+        { zh:"1835年 John Batman 因這裡的天然淡水源選定了墨爾本的位置", en:"In 1835, John Batman chose this site for Melbourne because of its natural freshwater source" },
+        { zh:"Southbank 曾是造船廠、釀酒廠聚集的工業區", en:"Southbank used to be an industrial zone of shipyards and breweries" },
+        { zh:"亞拉河呈咖啡色是因為黏土顆粒，歐洲人來之前其實是清澈的", en:"The Yarra's brown colour comes from clay sediment — it was clear before European settlement" },
+      ],
+      think:[
+        { zh:"為什麼一條河會決定一座城市的位置？", en:"Why would a river decide where a city is built?" },
+        { zh:"Southbank 以前是工業區，現在是藝術文化區——你覺得這種轉變好不好？", en:"Southbank went from industrial zone to arts precinct — is that kind of transformation a good thing?" },
+        { zh:"🌍 SDG 6｜河流的健康和一座城市的發展，要怎麼樣才能兼顧？", en:"🌍 SDG 6｜How can a city grow while still keeping its river healthy?" },
+      ] },
+  ],
   2: [
     { name:"Flinders Street Station", tagEn:"Melbourne's Most Famous Meeting Place", tagZh:"墨爾本最著名的集合地標",
       zh:"福林德斯街車站黃色外牆、綠色圓頂與著名的大鐘，讓它矗立墨爾本市中心已超過一世紀。第一座車站建於1854年淘金熱時期，今天看到的建築則在1909年完工，很快成為墨爾本成長與自信的象徵。\n\n在智慧型手機出現以前，墨爾本人習慣約在車站大鐘下見面，「鐘下見」至今仍是在地傳統。還有個著名都市傳說：車站設計圖當年不小心跟印度孟買的車站搞混了——雖然並非事實，卻流傳至今。它不只是交通樞紐，更是無數墨爾本旅程開始的地方。",
       en:"With its yellow façade, green dome, and iconic clocks, Flinders Street Station has stood at the heart of Melbourne for more than a century. The first station was built here in 1854 during Victoria's gold rush; today's building was completed in 1909 and quickly became a symbol of the city's growth and confidence.\n\nLong before smartphones, Melburnians arranged to meet beneath the station's famous clocks — \"Meet me under the clocks\" is still a local tradition today. A well-known urban legend claims its design was accidentally swapped with a station in Mumbai; though untrue, the story endures.",
-      photo:"從對面 Federation Square 的階梯往上拍，可以把黃色鐘樓跟站前人潮一起收進畫面；傍晚燈光亮起後鐘樓會變暖黃色，適合拍夜景。" },
+      facts:[
+        { zh:"第一座車站建於1854年淘金熱時期", en:"The first station was built in 1854 during the gold rush" },
+        { zh:"現在的建築在1909年完工", en:"Today's building was completed in 1909" },
+        { zh:"「鐘下見」是墨爾本人的集合暗語", en:"\"Meet me under the clocks\" is a Melbourne tradition" },
+      ],
+      photoTips:[
+        { zh:"從對面 Federation Square 的階梯往上拍，把黃色鐘樓跟站前人潮一起收進畫面", en:"Shoot from the Fed Square steps opposite to frame the clock tower with the crowd below" },
+        { zh:"傍晚燈光亮起後鐘樓會轉為暖黃色，是拍夜景的最佳時段", en:"Once the lights come on at dusk the tower glows warm gold — best time for a night shot" },
+        { zh:"平日上午十點前人潮較少，適合拍空景", en:"Before 10am on a weekday it's quieter — good for an empty-station shot" },
+      ],
+      think:[
+        { zh:"為什麼「在鐘底下見面」這個說法可以流傳100多年？台灣有沒有類似的約定地點？", en:"Why has \"meet me under the clocks\" lasted over 100 years? Does Taiwan have a similar meeting spot?" },
+        { zh:"你覺得車站應該是什麼樣子？和台灣的火車站有什麼不同？", en:"What should a train station look like? How is this one different from stations in Taiwan?" },
+        { zh:"🌍 SDG 11｜大眾運輸如何讓一座城市更永續、更公平？", en:"🌍 SDG 11｜How does public transport make a city more sustainable and fair for everyone?" },
+      ] },
     { name:"Federation Square", tagEn:"The Square That Melbourne Once Hated", tagZh:"墨爾本曾經討厭的廣場",
       zh:"2002年開幕時，聯邦廣場並不是人人都喜歡——大膽前衛的設計和周圍的歷史建築格格不入，不少評論甚至說它醜，一度是澳洲最具爭議的建築案之一。\n\n但人們還是開始使用它：家庭在此聚會、藝術家在此表演、重大活動在此轉播。久而久之，它成了「墨爾本的客廳」，聚集了博物館、藝廊與各種節慶活動，也成為這座城市最容易辨認的地標之一。",
       en:"When Federation Square opened in 2002, not everyone loved it — its bold, unusual design looked nothing like the historic buildings around it, and many critics called it ugly. For a time it was one of Australia's most controversial construction projects.\n\nYet people started using it anyway: families gathered, artists performed, major events were broadcast here. Over time it became Melbourne's living room — home to museums, galleries, and festivals.",
-      photo:"廣場地磚是不規則多邊形拼貼，蹲低由上往下拍地面紋理很有設計感；傍晚大螢幕投影亮起時適合拍城市夜景與人潮。" },
+      facts:[
+        { zh:"2002年開幕，設計曾引發爭議", en:"Opened in 2002, its design was once controversial" },
+        { zh:"現在被暱稱為『墨爾本的客廳』", en:"Now nicknamed \"Melbourne's living room\"" },
+        { zh:"聚集博物館、藝廊與各種節慶活動", en:"Home to museums, galleries, and festivals" },
+      ],
+      photoTips:[
+        { zh:"廣場地磚是不規則多邊形拼貼，蹲低由上往下拍地面紋理很有設計感", en:"The irregular paving makes a great pattern shot from a low, top-down angle" },
+        { zh:"傍晚大螢幕投影亮起時適合拍城市夜景與人潮", en:"At dusk the big screen lights up — a good backdrop for a night crowd shot" },
+        { zh:"從對面的天橋找制高點，可以拍到整個廣場的全景", en:"Find an elevated spot on the walkway opposite for a wide view of the square" },
+      ],
+      think:[
+        { zh:"你覺得 Federation Square 好看嗎？一個被大家說醜的設計，為什麼後來變成歷史遺產？", en:"Do you think Federation Square is beautiful? Why did a once-hated design later become a heritage site?" },
+        { zh:"一個城市為什麼需要廣場？台灣有沒有類似的公共空間？", en:"Why does a city need a public square? Does Taiwan have a similar space?" },
+        { zh:"🌍 SDG 11｜一個對所有人都友善的公共空間，會是什麼樣子？", en:"🌍 SDG 11｜What would a public space that's welcoming to everyone look like?" },
+      ] },
     { name:"ACMI 澳洲動態影像中心", tagEn:"Where Stories Come to Life", tagZh:"故事誕生的地方",
       zh:"位於聯邦廣場內的ACMI（澳洲動態影像中心），是澳洲的國家級螢幕文化博物館，探討人類如何透過動態影像說故事——從早期電影、電視，到電玩遊戲、動畫與社群媒體都在其中。\n\n館內可以認識電影製作的歷史、了解視覺特效如何完成，還有許多互動展覽揭露現代媒體背後的創作過程。ACMI提醒我們：科技一直在變，但人類想說故事的渴望始終不變。",
       en:"Located in Federation Square, ACMI (the Australian Centre for the Moving Image) is Australia's national museum of screen culture, exploring how stories are told through moving images — from early cinema and television to video games, animation, and social media.\n\nInside, visitors can explore the history of filmmaking, see how visual effects are made, and try interactive exhibits revealing the creative process behind modern media.",
-      photo:"館內互動展覽燈光偏暗，建議關閃光燈，善用螢幕本身的光源當補光。" },
+      facts:[
+        { zh:"位於聯邦廣場內，是澳洲的國家級螢幕文化博物館", en:"Located in Fed Square, it's Australia's national museum of screen culture" },
+        { zh:"涵蓋電影、電視、電玩、動畫與社群媒體", en:"Covers film, TV, games, animation, and social media" },
+        { zh:"許多互動展覽揭露現代媒體的創作過程", en:"Many exhibits reveal the creative process behind modern media" },
+      ],
+      photoTips:[
+        { zh:"館內燈光偏暗，建議關閃光燈，改用螢幕本身的光源當補光", en:"Lighting is low inside — turn off flash and let the screens provide the light" },
+        { zh:"捕捉『人與畫面互動』的瞬間，比單拍展品更有故事感", en:"Capture someone interacting with a display rather than just the exhibit itself" },
+        { zh:"部分展區禁止拍照，入場前留意標示", en:"Some galleries prohibit photography — check the signage first" },
+      ],
+      think:[
+        { zh:"電影、電玩、社群媒體——這些影像如何改變了你的日常生活？", en:"Film, games, social media — how have moving images changed your daily life?" },
+        { zh:"如果你也拿到 The Lens，你會想收藏哪一件展品？為什麼？", en:"If you had The Lens, which exhibit would you collect — and why?" },
+        { zh:"🌍 SDG 4｜科技和媒體可以怎麼被用來，讓更多不同的聲音被『看見』？", en:"🌍 SDG 4｜How can technology and media help more diverse voices be seen and heard?" },
+      ] },
   ],
   3: [
     { name:"Queen Victoria Market", tagEn:"More Than Just a Market", tagZh:"不只是一座市場",
       zh:"維多利亞女王市場佔地超過七公頃，是南半球最大的露天市場。自1878年開業至今，每年吸引數百萬遊客造訪數百個攤位，販售新鮮蔬果、海鮮、肉品、服飾以及來自世界各地的美食。\n\n走在市場裡，就像走過一趟墨爾本的縮影——希臘橄欖、義大利起司、亞洲香料、澳洲蜂蜜，幾步路內就能全部找到。開業140多年後，它真正的魅力是網路購物永遠取代不了的：人與人之間的連結。",
       en:"Covering more than seven hectares, Queen Victoria Market is the largest open-air market in the Southern Hemisphere. Open since 1878, it draws millions of visitors each year to hundreds of stalls selling fresh produce, seafood, meat, clothing, and food from around the world.\n\nWalking through the market feels like a journey through Melbourne itself — Greek olives, Italian cheeses, Asian spices, and Australian honey all sit within a few steps of each other.",
-      photo:"清晨市場剛開攤位時人少光線好，蔬果攤位的顏色堆疊很適合拍特寫；紅磚建築外觀在正午順光最清楚。" },
+      facts:[
+        { zh:"佔地超過七公頃，是南半球最大的露天市場", en:"Covers more than 7 hectares — the largest open-air market in the Southern Hemisphere" },
+        { zh:"自1878年開業至今", en:"Open since 1878" },
+        { zh:"數百個攤位販售蔬果、海鮮、肉品與世界美食", en:"Hundreds of stalls sell fresh produce, seafood, meat, and food from around the world" },
+        { zh:"這塊地曾是墨爾本第一個公墓，據說地底仍有超過9,000具遺骸", en:"The site was once Melbourne's first cemetery — over 9,000 remains are said to still lie beneath it" },
+      ],
+      photoTips:[
+        { zh:"清晨市場剛開攤位人少光線好，蔬果堆疊的顏色很適合拍特寫", en:"Arrive early for fewer crowds and great light on the colourful produce" },
+        { zh:"紅磚建築外觀在正午順光時最清楚好拍", en:"The red-brick exterior photographs best around midday with the sun behind you" },
+        { zh:"拍攝攤販或商品前記得先詢問是否可以", en:"Always ask before photographing a stallholder or their stall" },
+      ],
+      think:[
+        { zh:"你覺得在數位時代，實體市場還有存在的意義嗎？", en:"In the digital age, do physical markets still matter?" },
+        { zh:"市場蓋在舊公墓上——如果你當時知道這件事，還會想逛這裡嗎？", en:"The market was built over an old cemetery — if you'd known that going in, would it change how you feel about visiting?" },
+        { zh:"🌍 SDG 12｜在市場買東西，跟在網路上買東西，對環境的影響有什麼不同？", en:"🌍 SDG 12｜How does buying from a market differ from buying online, in terms of environmental impact?" },
+      ] },
     { name:"State Library of Victoria", tagEn:"The Library Built for Everyone", tagZh:"為所有人而建的圖書館",
       zh:"維多利亞州立圖書館成立於1854年，是澳洲歷史最悠久的公共圖書館之一，也是全世界最早的免費公共圖書館之一。從創立之初，它的使命就很簡單：讓每個人都能自由取得知識。\n\n館內最著名的空間是1913年啟用、八角形設計的拉籌伯閱覽室（La Trobe Reading Room），曾是全球最大的閱覽室之一。超過170年後的今天，館內仍收藏數百萬冊書籍、照片與手稿。",
       en:"Established in 1854, State Library Victoria is one of the oldest public libraries in Australia and one of the first free public libraries in the world. Its mission from the start was simple: give everyone access to knowledge.\n\nIts most famous space, the octagonal La Trobe Reading Room, opened in 1913 and was once one of the largest reading rooms in the world.",
-      photo:"必拍 La Trobe Reading Room，從二樓環形走廊往下俯拍圓頂閱覽室，能拍到放射狀書桌排列的對稱美。" },
+      facts:[
+        { zh:"成立於1854年，是全世界最早的免費公共圖書館之一", en:"Established in 1854, one of the world's first free public libraries" },
+        { zh:"La Trobe Reading Room於1913年啟用，八角形設計", en:"The octagonal La Trobe Reading Room opened in 1913" },
+        { zh:"館內收藏數百萬冊書籍、照片與手稿", en:"Home to millions of books, photographs, and manuscripts" },
+        { zh:"館內珍藏著名罪犯／英雄 Ned Kelly 的自製鎧甲", en:"The library holds the homemade armour of Ned Kelly, Australia's famous outlaw-or-folk-hero" },
+      ],
+      photoTips:[
+        { zh:"必拍 La Trobe Reading Room，從二樓環形走廊往下俯拍最經典", en:"Shoot the La Trobe Reading Room from the second-floor gallery for the classic angle" },
+        { zh:"放射狀排列的書桌從高處拍會有很強的對稱感", en:"The radiating desks make a striking symmetrical shot from above" },
+        { zh:"館內請保持安靜，拍照時避免使用快門音或閃光燈", en:"Keep it quiet — mute your shutter sound and skip the flash" },
+      ],
+      think:[
+        { zh:"公共圖書館對一座城市有什麼意義？", en:"What does a public library mean for a city?" },
+        { zh:"Ned Kelly——罪犯還是英雄？你覺得呢？", en:"Ned Kelly — criminal or hero? What do you think?" },
+        { zh:"🌍 SDG 4｜免費的公共圖書館，對教育公平有什麼意義？", en:"🌍 SDG 4｜What does a free public library mean for equal access to education?" },
+      ] },
   ],
   4: [
     { name:"University of Melbourne", tagEn:"A University That Helped Build a Nation", tagZh:"協助建構一個國家的大學",
       zh:"墨爾本大學創立於1853年維多利亞淘金熱正盛之時，是澳洲第二古老的大學。它的使命從來不只是教育學生，更是協助打造一個現代社會——畢業生中包括總理、法官、科學家與諾貝爾獎得主。\n\n如今，墨爾本大學穩居世界頂尖大學之列，吸引超過150個國家的學生前來就讀。走在校園裡，哥德復興式建築與尖端研究設施比鄰而立。",
       en:"Founded in 1853 during Victoria's gold-rush boom, the University of Melbourne is Australia's second-oldest university. Its mission was never just to teach students, but to help build a modern society — its graduates include prime ministers, judges, scientists, and Nobel Prize winners.\n\nToday the university consistently ranks among the world's best and draws students from over 150 countries.",
-      photo:"Old Quad 古典建築配藍天很好拍，低角度取景把哥德式建築和草皮一起收進畫面。" },
+      facts:[
+        { zh:"創立於1853年，是澳洲第二古老的大學", en:"Founded in 1853, Australia's second-oldest university" },
+        { zh:"畢業生包括總理、法官、科學家與諾貝爾獎得主", en:"Graduates include prime ministers, judges, scientists, and Nobel laureates" },
+        { zh:"吸引超過150個國家的學生前來就讀", en:"Draws students from over 150 countries" },
+      ],
+      photoTips:[
+        { zh:"Old Quad 古典建築配藍天很好拍，低角度取景把建築跟草皮一起收進畫面", en:"The Old Quad looks great against blue sky — shoot low to frame it with the lawn" },
+        { zh:"拱廊、迴廊的光影變化適合拍人像側寫", en:"The arcades' light and shadow make a nice backdrop for portraits" },
+        { zh:"上課時段請保持安靜、避免打擾學生", en:"Keep noise down during class hours" },
+      ],
+      think:[
+        { zh:"如果你可以來這裡念書，你會念什麼？", en:"If you could study here, what would you study?" },
+        { zh:"一張頂尖大學的文憑，和一個頂尖的職業技能——你覺得哪個更有價值？", en:"A degree from a top university, or a top-tier trade skill — which do you think is more valuable?" },
+        { zh:"🌍 SDG 4｜教育機會的不平等，你覺得可以怎麼被改善？", en:"🌍 SDG 4｜How do you think unequal access to education could be improved?" },
+      ] },
     { name:"Lygon Street", tagEn:"The Street That Brought Italy to Melbourne", tagZh:"把義大利帶到墨爾本的一條街",
       zh:"位於卡爾頓區的萊貢街（Lygon Street）有「小義大利」之稱，以咖啡館、餐廳與義式冰淇淋聞名。但它的故事要從二戰後說起——當時大批義大利移民定居墨爾本，開設家族經營的咖啡館與餐廳，代代相傳著傳統食譜。\n\n早在世界各地流行精品咖啡之前，義大利移民就已經把濃縮咖啡機和咖啡館文化帶到這裡——不少歷史學家認為，萊貢街正是墨爾本知名咖啡文化的發源地。",
       en:"Known as Melbourne's Little Italy, Lygon Street in Carlton is famous today for its cafés, restaurants, and gelato. Its story began after World War II, when thousands of Italian migrants settled in Melbourne and opened family-run cafés, passing recipes down through generations.\n\nMany historians consider Lygon Street the birthplace of Melbourne's famous coffee culture.",
-      photo:"街道兩側露天咖啡座色彩繽紛，適合拍街景人文；傍晚燈飾亮起後很有義式風情。" },
-    { name:"Melbourne Zoo", tagEn:"Protecting Wildlife for Future Generations", tagZh:"為下一代守護野生動物",
-      zh:"墨爾本動物園成立於1862年，是澳洲歷史最悠久的動物園。它的角色隨著時代大幅轉變——現代動物園不再只是展示動物，而是更著重保育、研究與動物福利。\n\n墨爾本動物園參與澳洲國內外的繁殖計畫與保育專案，園內也能見到袋鼠、無尾熊、袋熊等澳洲原生物種。",
-      en:"Established in 1862, Melbourne Zoo is Australia's oldest zoo. Today's zoos focus less on simply displaying animals and more on conservation, research, and animal welfare.\n\nMelbourne Zoo takes part in breeding programs and conservation projects both in Australia and overseas, and is home to native species like kangaroos, koalas, and wombats.",
-      photo:"拍動物建議用長焦鏡頭，耐心等動物靠近玻璃或欄杆邊緣的瞬間再按快門，可避免拍到反光。" },
+      facts:[
+        { zh:"卡爾頓區的『小義大利』，二戰後義大利移民聚落", en:"Carlton's \"Little Italy,\" settled by Italian migrants after WWII" },
+        { zh:"許多歷史學家認為這裡是墨爾本咖啡文化的發源地", en:"Many historians consider it the birthplace of Melbourne's coffee culture" },
+        { zh:"以咖啡館、餐廳與義式冰淇淋聞名", en:"Famous for its cafés, restaurants, and gelato" },
+      ],
+      photoTips:[
+        { zh:"街道兩側露天咖啡座色彩繽紛，適合拍街景人文", en:"The colourful outdoor cafés make great candid street shots" },
+        { zh:"傍晚燈飾亮起後很有義式風情，適合拍夜間街景", en:"Once the string lights come on at dusk it has real Italian charm" },
+        { zh:"想拍店家招牌全景，建議站在對街拍", en:"For a wide shot of the shopfronts, stand across the street" },
+      ],
+      think:[
+        { zh:"移民帶來的文化如何改變了一座城市？", en:"How does the culture immigrants bring change a city?" },
+        { zh:"如果你的家族移民到其他國家，你希望保留什麼文化？", en:"If your family emigrated, what part of your culture would you want to keep?" },
+        { zh:"🌍 SDG 10｜一個社會要怎麼樣，才能讓移民感覺『被接納』？這讓你想到自己生活中類似的經驗嗎？", en:"🌍 SDG 10｜What makes a society feel welcoming to immigrants? Does this remind you of a similar experience of your own?" },
+      ] },
   ],
   5: [
     { name:"Scienceworks", tagEn:"Where Curiosity Becomes Discovery", tagZh:"好奇心變成發現的地方",
       zh:"科學工作坊（Scienceworks）位於墨爾本西區，自1992年開放至今，是維多利亞州數一數二的科學博物館。和傳統博物館不同，它鼓勵訪客成為主動的參與者——透過互動展覽親自動手測試想法、體驗科學概念。\n\n其中最受歡迎的是天文館，透過沉浸式節目探索夜空與人類在宇宙中的位置。",
       en:"Located in Melbourne's western suburbs and open since 1992, Scienceworks is one of Victoria's leading science museums. Unlike traditional museums, it encourages visitors to become active participants — testing ideas and experiencing scientific concepts firsthand.\n\nOne of its most popular attractions is the planetarium.",
-      photo:"互動展覽適合抓拍學生操作實驗的瞬間，大廳有自然採光，可以拍建築線條。" },
+      facts:[
+        { zh:"自1992年開放，是維多利亞州數一數二的科學博物館", en:"Open since 1992, one of Victoria's leading science museums" },
+        { zh:"鼓勵訪客成為主動的參與者", en:"Encourages visitors to be active participants, not just observers" },
+        { zh:"天文館是館內最受歡迎的設施之一", en:"The planetarium is one of its most popular attractions" },
+      ],
+      photoTips:[
+        { zh:"互動展覽適合抓拍學生操作實驗時的專注表情", en:"Great for candid shots of students absorbed in an experiment" },
+        { zh:"大廳有自然採光，適合拍建築線條跟挑高空間感", en:"The lobby's natural light works well for architectural shots" },
+        { zh:"部分展區較暗，建議提高相機 ISO 或使用手機夜間模式", en:"Some sections are dim — raise your ISO or use night mode" },
+      ],
+      think:[
+        { zh:"你覺得科學和日常生活有什麼關係？", en:"What's the connection between science and everyday life?" },
+        { zh:"你選了哪個展品？試著用最簡單的方式解釋給別人聽", en:"Which exhibit did you pick? Try explaining it to someone as simply as possible" },
+        { zh:"🌍 SDG 9｜要怎麼樣才能讓每個孩子，不分背景，都有機會接觸好的科學教育？", en:"🌍 SDG 9｜How can every child, regardless of background, get access to good science education?" },
+      ] },
     { name:"Williamstown", tagEn:"Where Melbourne's Story Began", tagZh:"墨爾本故事開始的地方",
       zh:"威廉斯敦（Williamstown）位於菲利普港灣畔，是維多利亞州最古老的聚落之一。19世紀初，來自世界各地的船隻由此進入港灣，帶來了塑造墨爾本未來的人群與物資——淘金熱時期，許多移民正是從這座港口第一次踏上澳洲的土地。\n\n如今，歷史建築與老碼頭依然能讓人一窺19世紀的生活樣貌，沿岸的咖啡館與公園也讓這裡成為在地人與遊客都喜愛的去處。",
       en:"Located on Port Phillip Bay, Williamstown is one of Victoria's oldest settlements. In the early 19th century, ships from around the world entered the bay here, bringing the people and goods that helped shape Melbourne's future.\n\nToday, historic buildings and old piers still offer a glimpse into 19th-century life.",
-      photo:"海港邊適合拍夕陽跟船隻剪影，退潮時的礁石步道也是取景好地方。" },
+      facts:[
+        { zh:"位於菲利普港灣畔，是維多利亞州最古老的聚落之一", en:"On Port Phillip Bay, one of Victoria's oldest settlements" },
+        { zh:"19世紀許多移民從這座港口第一次踏上澳洲", en:"Many migrants first set foot in Australia through this port" },
+        { zh:"歷史建築與老碼頭至今仍保留19世紀樣貌", en:"Historic buildings and old piers still reflect 19th-century life" },
+      ],
+      photoTips:[
+        { zh:"海港邊適合拍夕陽跟船隻剪影", en:"The waterfront is great for sunset shots with boats in silhouette" },
+        { zh:"退潮時的礁石步道也是取景好地方", en:"At low tide the rocky shoreline path opens up another good angle" },
+        { zh:"從防波堤望向市區，能拍到完整的墨爾本天際線", en:"Looking back from the breakwater captures the full Melbourne skyline" },
+      ],
+      think:[
+        { zh:"為什麼「被忽略」反而保護了 Williamstown 的歷史建築？", en:"Why did being \"overlooked\" end up protecting Williamstown's historic buildings?" },
+        { zh:"站在這裡看 CBD 的感覺，和站在 CBD 看這裡有什麼不同？", en:"How does looking at the CBD from here feel different from looking at here from the CBD?" },
+        { zh:"🌍 SDG 11｜歷史保存和城市發展，要怎麼樣才能兩者兼顧？", en:"🌍 SDG 11｜How can a city balance historic preservation with development?" },
+      ] },
+  ],
+  6: [
+    { name:"Royal Arcade", tagEn:"Australia's Oldest Shopping Arcade", tagZh:"澳洲最古老的購物拱廊",
+      zh:"皇家拱廊建於1869年，是澳洲最古老的購物拱廊，也是墨爾本最具代表性的維多利亞式建築之一。彩色玻璃天窗、大理石地板、精緻裝飾——這裡是19世紀末「室內購物」概念的體現，在購物中心出現以前，這就是無論天氣如何都能逛街的地方。\n\n拱廊入口處有兩座來自英國傳說的時鐘雕像 Gog 和 Magog，每逢整點會敲鐘，是墨爾本人共同的童年記憶。裡面還有一家超過120年歷史的老字號巧克力店 Haigh's Chocolates，至今仍在原址營業。",
+      en:"Royal Arcade opened in 1869 and is Australia's oldest shopping arcade — one of the best-preserved Victorian-era retail spaces in the world. Before shopping malls existed, this was the idea: an indoor street covered by a glass roof, lined with specialty shops, where you could shop in any weather.\n\nAt the entrance stand Gog and Magog, two legendary figures from British mythology who strike a bell every hour — a memory many Melburnians grew up with. Haigh's Chocolates, over 120 years old, still trades here today.",
+      facts:[
+        { zh:"建於1869年，是澳洲最古老的購物拱廊", en:"Opened in 1869, Australia's oldest shopping arcade" },
+        { zh:"入口的 Gog 與 Magog 時鐘雕像每逢整點敲鐘", en:"The Gog and Magog clock figures at the entrance strike a bell every hour" },
+        { zh:"Haigh's Chocolates 在此經營已超過120年", en:"Haigh's Chocolates has traded here for more than 120 years" },
+      ],
+      photoTips:[
+        { zh:"抬頭拍彩色玻璃天窗跟精緻鐵件裝飾，順光時色彩最飽和", en:"Shoot the stained-glass roof and ironwork looking up — colours are richest in good light" },
+        { zh:"整點時蹲低仰角拍 Gog、Magog 敲鐘的瞬間", en:"On the hour, shoot low-angle as Gog and Magog strike the bell" },
+        { zh:"大理石地板反光強，側面取景可以避免過曝", en:"The marble floor reflects a lot of light — shoot from the side to avoid overexposure" },
+      ],
+      think:[
+        { zh:"為什麼有些老建築能夠存活150年而不被拆掉？", en:"Why do some 150-year-old buildings survive instead of being torn down?" },
+        { zh:"「室內購物街」這個概念，在今天有什麼不同的形式？", en:"The idea of an \"indoor shopping street\" — what forms does it take today?" },
+        { zh:"🌍 SDG 11｜老建築被保留下來，對一個社區的認同感有什麼幫助？", en:"🌍 SDG 11｜How does preserving old buildings help a community's sense of identity?" },
+      ] },
   ],
   7: [
     { name:"Hosier Lane", tagEn:"The Street That Never Stays the Same", tagZh:"永遠在變的一條巷子",
       zh:"霍西爾巷（Hosier Lane）是墨爾本被拍照次數最多的地點之一——但和大多數地標不同，它從來不會一成不變。街頭藝術家從1990年代開始在這裡創作，新的壁畫不斷取代舊的，讓這條巷子成了一座沒有固定館藏的「活畫廊」。\n\n每次造訪都會看到不一樣的風景，而這種持續變化，正是霍西爾巷成為墨爾本創意與自我表達象徵的原因。",
       en:"Hosier Lane is one of Melbourne's most photographed spots — and unlike most landmarks, it never stays the same. Street artists began using its walls in the 1990s, and new murals constantly replace old ones, turning the laneway into a living gallery.\n\nNo two visits are ever the same.",
-      photo:"塗鴉每天都會更新，建議直式構圖把整面牆收進畫面，盡量避免拍到路人正臉。" },
+      facts:[
+        { zh:"街頭藝術家從1990年代開始在此創作", en:"Street artists began using its walls in the 1990s" },
+        { zh:"新壁畫不斷取代舊的，沒有固定的『館藏』", en:"New murals constantly replace old ones — there's no fixed collection" },
+        { zh:"每次造訪都會看到不一樣的風景", en:"No two visits are ever the same" },
+        { zh:"連 Banksy 也曾在這裡留下作品（後來被其他塗鴉覆蓋）", en:"Even Banksy once left a piece here — long since painted over by someone else" },
+      ],
+      photoTips:[
+        { zh:"塗鴉每天都會更新，建議直式構圖把整面牆收進畫面", en:"The art changes daily — shoot in portrait orientation to fit the whole wall" },
+        { zh:"盡量避免拍到路人正臉，尊重他人隱私", en:"Try to avoid capturing strangers' faces directly" },
+        { zh:"巷弄狹窄光線變化大，正午前後光線較均勻好拍", en:"The lane is narrow with tricky light — midday lighting is more even" },
+      ],
+      think:[
+        { zh:"你覺得街頭塗鴉算是藝術嗎？在什麼條件下算、什麼條件下不算？", en:"Is street graffiti art? Under what conditions does it count — or not?" },
+        { zh:"如果你可以在這裡留下一件作品，你想表達什麼？", en:"If you could leave a piece here, what would you want to say?" },
+        { zh:"🌍 SDG 16｜街頭藝術是一種發聲的方式嗎？誰的聲音容易被聽見，誰的不容易？", en:"🌍 SDG 16｜Is street art a way of having a voice? Whose voices get heard easily, and whose don't?" },
+      ] },
     { name:"NGV 維多利亞國家美術館", tagEn:"Where Art Meets History", tagZh:"藝術與歷史相遇之處",
       zh:"創立於1861年的維多利亞國家美術館（NGV），是澳洲歷史最悠久的公共美術館，館藏超過75,000件來自世界各地的藝術作品。入口處著名的水牆，是墨爾本最容易辨認的景觀之一。\n\nNGV的館藏橫跨數世紀的人類創造力，從古典繪畫到當代裝置藝術都有；館方經常舉辦大型國際特展，吸引全球訪客前來。",
       en:"Founded in 1861, the National Gallery of Victoria is Australia's oldest public art museum, home to more than 75,000 artworks from around the world. Its famous water wall at the entrance is one of the most recognisable sights in Melbourne.\n\nNGV's collection spans centuries of human creativity, from classical paintings to contemporary installations.",
-      photo:"入口大廳的水牆很適合拍倒影，館內多個展廳挑高採光佳，適合拍建築線條。" },
+      facts:[
+        { zh:"創立於1861年，是澳洲歷史最悠久的公共美術館", en:"Founded in 1861, Australia's oldest public art museum" },
+        { zh:"館藏超過75,000件來自世界各地的藝術作品", en:"Home to more than 75,000 artworks from around the world" },
+        { zh:"入口處的水牆是墨爾本最容易辨認的景觀之一", en:"Its entrance water wall is one of Melbourne's most recognisable sights" },
+      ],
+      photoTips:[
+        { zh:"入口大廳的水牆很適合拍倒影跟動態水流的長曝光", en:"The water wall is great for reflections or a long exposure of the flowing water" },
+        { zh:"館內多個展廳挑高採光佳，適合拍建築線條", en:"Several galleries have high ceilings and great light for architectural shots" },
+        { zh:"部分特展禁止拍照，入場前留意標示", en:"Some special exhibitions prohibit photography — check signage first" },
+      ],
+      think:[
+        { zh:"你選了哪件作品？為什麼是它讓你停下腳步？", en:"Which work did you choose? Why did it make you stop?" },
+        { zh:"美術館裡的藝術和 Hosier Lane 的街頭藝術，哪個對你的影響更大？", en:"Which affects you more — the art in a gallery, or the street art at Hosier Lane?" },
+        { zh:"🌍 SDG 4｜藝術可以如何幫助我們理解自己不熟悉的觀點？", en:"🌍 SDG 4｜How can art help us understand perspectives unfamiliar to us?" },
+      ] },
+  ],
+  8: [
+    { name:"GET Education Alpha 工廠（餐旅實習場）", tagEn:"Where Learning Happens on a Real Kitchen Floor", tagZh:"在真實廚房裡學習",
+      zh:"GET Education 工廠位於 Dandenong South，距 CBD 約40分鐘車程，是一座1萬平方米的工廠級教學場域，以「產學合一、以工養學」為核心理念。這裡不是傳統校園，而是一座真正的商業廚房——設備、動線、標準都跟業界餐廳一樣，學生在這裡不只學理論，而是實際動手做。\n\n澳洲的 VET（技職教育）體系與大學平行，政府認證，畢業即可就業。Certificate III in Commercial Cookery（商業廚藝）課程約1年，學費約AUD $12,500。",
+      en:"The GET Education factory in Dandenong South, about 40 minutes from the CBD, is a 10,000-square-metre teaching facility built on one idea: the best way to learn a trade is to do it in a real workplace, not a classroom. The kitchen here is a genuine commercial kitchen — same equipment, same standards as a professional restaurant.\n\nAustralia's VET (Vocational Education and Training) system runs alongside universities, government-certified and recognised by employers. A Certificate III in Commercial Cookery takes about a year and costs around AUD $12,500.",
+      facts:[
+        { zh:"位於 Dandenong South，是一座1萬平方米的工廠級教學場域", en:"Located in Dandenong South, a 10,000-square-metre factory-scale teaching facility" },
+        { zh:"Certificate III in Commercial Cookery 約需1年，學費約AUD $12,500", en:"A Certificate III in Commercial Cookery takes about a year and costs around AUD $12,500" },
+        { zh:"澳洲技職教育（VET）由政府認證，畢業即可就業", en:"Australia's VET system is government-certified, with graduates job-ready on completion" },
+      ],
+      think:[
+        { zh:"「在工廠學習」和「在教室學習」有什麼根本的不同？", en:"What's the fundamental difference between learning in a factory and learning in a classroom?" },
+        { zh:"你會考慮走技職路線嗎？為什麼？", en:"Would you consider a vocational path? Why or why not?" },
+        { zh:"🌍 SDG 8｜『尊嚴勞動』對你來說是什麼意思？你希望未來的工作是什麼樣子？", en:"🌍 SDG 8｜What does \"decent work\" mean to you? What would you want your future job to look like?" },
+      ] },
+    { name:"Victoria Street 越南街", tagEn:"A Taste of Vietnam in Melbourne", tagZh:"墨爾本的越南味道",
+      zh:"維多利亞街位於列治文區（Richmond），是墨爾本越南社群的核心地帶。1975年西貢淪陷後，大量越南難民逃離家園，許多人以船民身分抵達澳洲並定居於此，在這條街上開餐廳、雜貨店，白手起家建立起社區。\n\n如今這條街有超過60家越南餐廳，是墨爾本最著名的飲食文化街之一。招牌料理包括 Pho（河粉）、Banh Mi（法越三明治，源自法國殖民越南時期的飲食融合）與 Goi Cuon（春捲）。",
+      en:"Victoria Street in Richmond is the heart of Melbourne's Vietnamese community. After the fall of Saigon in 1975, many Vietnamese refugees — the \"boat people\" — resettled here, building a community from almost nothing by opening restaurants and grocery stores.\n\nToday the street has more than 60 Vietnamese restaurants, known for Pho, Banh Mi (a legacy of French colonial Vietnam), and Goi Cuon.",
+      facts:[
+        { zh:"1975年西貢淪陷後，越南難民在此落地生根", en:"Vietnamese refugees settled here after the fall of Saigon in 1975" },
+        { zh:"現在有超過60家越南餐廳", en:"More than 60 Vietnamese restaurants line the street today" },
+        { zh:"Banh Mi 是法國殖民越南時期留下的飲食融合產物", en:"Banh Mi is a culinary legacy of French colonial Vietnam" },
+      ],
+      think:[
+        { zh:"食物如何成為文化保存的方式？", en:"How does food become a way of preserving culture?" },
+        { zh:"如果你的家族必須離開台灣，你會去哪裡？你最想保留什麼？", en:"If your family had to leave Taiwan, where would you go — and what would you most want to keep?" },
+        { zh:"🌍 SDG 10｜難民與移民為城市帶來了什麼？我們可以怎麼樣讓他們更容易融入？", en:"🌍 SDG 10｜What do refugees and immigrants bring to a city? How can we help them feel more welcome?" },
+      ] },
   ],
   9: [
     { name:"RMIT University", tagEn:"Learning in the Heart of the City", tagZh:"在城市中心學習",
       zh:"皇家墨爾本理工大學（RMIT）源起於1887年，是澳洲設計、科技與工程領域的頂尖學府之一。和許多傳統大學不同，它的校園直接融入墨爾本的市區街道，教育與城市生活比鄰而居。\n\nRMIT以實作學習聞名——學生透過真實專案與產業合作應用所學，畢業生遍及全球逾100個國家。",
       en:"Tracing its roots to 1887, RMIT University is one of Australia's leading institutions for design, technology, and engineering. Unlike many traditional universities, its campus blends directly into Melbourne's city streets.\n\nRMIT is known for hands-on learning — students apply knowledge through real projects and industry partnerships.",
-      photo:"Storey Hall 色彩鮮豔的立面很好拍，建議仰角拍出建築的量體感。" },
+      facts:[
+        { zh:"源起於1887年，是澳洲設計、科技與工程領域的頂尖學府之一", en:"Tracing its roots to 1887, a leading institution for design, tech, and engineering" },
+        { zh:"校園直接融入墨爾本的市區街道", en:"Its campus blends directly into Melbourne's city streets" },
+        { zh:"以實作學習聞名，畢業生遍及全球逾100個國家", en:"Known for hands-on learning, with graduates across more than 100 countries" },
+        { zh:"1887年創立時，其實是提供工人夜間進修的技術學校", en:"Founded in 1887 as a night school for working-class tradespeople" },
+      ],
+      photoTips:[
+        { zh:"Storey Hall 色彩鮮豔的立面很好拍，建議仰角拍出建築的量體感", en:"Storey Hall's colourful façade is very photogenic from a low angle" },
+        { zh:"新舊建築相鄰處適合拍對比感強烈的畫面", en:"Where old and new buildings meet makes a striking contrast shot" },
+        { zh:"校園內請留意上課動線，避免擋到學生通行", en:"Be mindful of student foot traffic between classes" },
+      ],
+      think:[
+        { zh:"RMIT 從工人夜校到世界前200大——這個轉變對你來說代表什麼？", en:"RMIT went from a night school for workers to a top-200 university — what does that transformation mean to you?" },
+        { zh:"大學和技職學校的邊界正在模糊，你覺得這是好事嗎？", en:"The line between university and vocational school is blurring — do you think that's a good thing?" },
+        { zh:"🌍 SDG 8｜教育和就業之間的距離，要怎麼樣才能縮短？", en:"🌍 SDG 8｜How can the gap between education and employment be narrowed?" },
+      ] },
     { name:"Melbourne Museum", tagEn:"Preserving the Past, Inspiring the Future", tagZh:"保存過去，啟發未來",
       zh:"墨爾本博物館於2000年開幕，是南半球規模最大的博物館，館藏橫跨自然史、科學與澳洲文化，從恐龍化石到原住民文物收藏應有盡有。\n\n館內最知名的特色之一，是「森林畫廊」（Forest Gallery）——一座重現維多利亞州生態系的室內活體森林。",
       en:"Opened in 2000, Melbourne Museum is the largest museum in the Southern Hemisphere, home to millions of objects spanning natural history, science, and Australian culture.\n\nOne of its most famous features is the Forest Gallery, a living indoor forest recreating a Victorian ecosystem.",
-      photo:"中庭的森林展區挑高採光佳，適合拍人與展品互動的畫面。" },
+      facts:[
+        { zh:"2000年開幕，是南半球規模最大的博物館", en:"Opened in 2000, the largest museum in the Southern Hemisphere" },
+        { zh:"館藏橫跨自然史、科學與澳洲文化", en:"Collections span natural history, science, and Australian culture" },
+        { zh:"森林畫廊是一座重現維多利亞州生態系的室內活體森林", en:"The Forest Gallery is a living indoor forest recreating a Victorian ecosystem" },
+        { zh:"館內收藏傳奇賽馬 Phar Lap 的標本，牠是大蕭條時期澳洲人的精神象徵", en:"The museum houses the taxidermied body of Phar Lap, the legendary racehorse who became a symbol of hope during the Great Depression" },
+      ],
+      photoTips:[
+        { zh:"中庭的森林展區挑高採光佳，適合拍人與展品互動的畫面", en:"The forest gallery's atrium has great natural light for candid shots" },
+        { zh:"恐龍展廳燈光昏暗，建議提高 ISO 或用手機夜拍模式", en:"The dinosaur gallery is dim — raise your ISO or use night mode" },
+        { zh:"部分文化展區有拍照限制，入場前留意標示", en:"Some cultural exhibits have photography restrictions — check first" },
+      ],
+      think:[
+        { zh:"為什麼一匹馬可以成為一個國家的英雄？", en:"Why can a horse become a national hero?" },
+        { zh:"看到2,000年前的文物，你有什麼感覺？", en:"How do you feel standing in front of an artefact that's 2,000 years old?" },
+        { zh:"🌍 SDG 15｜保存自然史和文化資產，對下一代有什麼意義？", en:"🌍 SDG 15｜What does preserving natural history and cultural heritage mean for future generations?" },
+      ] },
+  ],
+  10: [
+    { name:"GET Education Alpha 工廠（木工＋建築工程）", tagEn:"Build It, Demolish It, Rebuild It", tagZh:"蓋了、拆了、再蓋一次",
+      zh:"同一個 GET Education 工廠，這天看的是木工與建築工程。Certificate III in Carpentry 是104週（約2年）的課程，學費約AUD $17,000加教材費AUD $2,000。教學核心哲學是「蓋了、拆了、再蓋」——學生反覆練習同一棟建築結構，每次重建都更快更好。\n\n澳洲建築業長期人才短缺，木工師傅薪資中位數約AUD $65,000–85,000（約台幣130–170萬），資深技師可超過AUD $100,000，高科技模板房（工廠預製、現場組裝）也是澳洲建築業的重要趨勢。",
+      en:"Back at the GET factory, but today it's carpentry and construction. A Certificate III in Carpentry takes about two years and costs AUD $17,000 plus materials. The teaching philosophy: build it, demolish it, rebuild it — students construct the same structure over and over, each time faster and more precise.\n\nAustralia has a serious shortage of skilled tradespeople. The median carpenter's salary is AUD $65,000–85,000 a year, with senior tradespeople earning over $100,000 — often more than university graduates.",
+      facts:[
+        { zh:"Certificate III in Carpentry 約需2年，學費約AUD $17,000", en:"A Certificate III in Carpentry takes about 2 years and costs around AUD $17,000" },
+        { zh:"木工師傅薪資中位數約AUD $65,000–85,000，資深技師可超過$100,000", en:"Median carpenter salary is AUD $65,000–85,000; senior tradespeople can earn over $100,000" },
+        { zh:"教學核心是「蓋了、拆了、再蓋」，靠反覆練習累積肌肉記憶", en:"The core method is \"build it, demolish it, rebuild it\" — repetition builds muscle memory" },
+      ],
+      think:[
+        { zh:"如果技職薪資和大學畢業生差不多，你還會堅持念大學嗎？為什麼？", en:"If trade salaries rival university graduate salaries, would you still insist on going to university? Why?" },
+        { zh:"「蓋了拆了再蓋」的學習方式，你覺得有效嗎？哪些領域可以應用這個概念？", en:"Does \"build, demolish, rebuild\" seem like an effective way to learn? What other fields could use this approach?" },
+        { zh:"🌍 SDG 8｜技職教育被重視的程度，反映了社會對『勞動』的什麼態度？", en:"🌍 SDG 8｜How much a society values vocational education reflects what attitude toward labour?" },
+      ] },
   ],
 };
 
 // 不對應特定一天的延伸內容（來自同一份文件），顯示在頁面最下方
 const EXTRA_SPOTS = [
-  { name:"Victoria Street 維多利亞街", tagEn:"A Taste of Vietnam in Melbourne", tagZh:"墨爾本的越南味道",
-    zh:"位於列治文區（Richmond）的維多利亞街，是墨爾本越南社群的核心地帶。1970到1980年代間，許多越南家庭因越戰而移居澳洲，列治文因此成為維多利亞州最重要的越南文化中心之一。\n\n如今這條街以餐廳、麵包店與雜貨店聞名，傳統越南料理與現代澳洲風味並存。",
-    en:"Located in Richmond, Victoria Street is known as the heart of Melbourne's Vietnamese community. During the 1970s and 80s, many Vietnamese families arrived in Australia following the Vietnam War.\n\nToday the street is famous for its restaurants, bakeries, and grocery stores." },
   { name:"澳洲超市與購物", tagEn:"Everyday Shopping Life in Australia", tagZh:"澳洲的日常購物生活",
     zh:"對國際學生來說，到澳洲第一個驚喜通常是超市。Woolworths（暱稱「Woolies」）和Coles是澳洲兩大連鎖超市，幾乎每個郊區都找得到；德國折扣超市ALDI則以每週的「Special Buys」聞名——中間走道會出現各種意想不到的商品，賣完就沒有。\n\n還有Kmart：和美國的Kmart完全不同，澳洲的Kmart是超受歡迎的平價百貨，甚至成了在地人的玩笑哏——「本來只想買一樣東西，結果推了一整台購物車出來」。對預算有限、要佈置新房間的學生來說，Kmart（還有Target、Big W）通常是採購的第一站。",
-    en:"For international students, one of the first surprises in Australia is the supermarket. Woolworths (\"Woolies\") and Coles are the two biggest chains, while German discount chain ALDI is known for its weekly \"Special Buys.\"\n\nThen there's Kmart: a beloved discount department store, famous for the running joke of \"going in for one thing and leaving with a trolley full.\"" },
+    en:"For international students, one of the first surprises in Australia is the supermarket. Woolworths (\"Woolies\") and Coles are the two biggest chains, while German discount chain ALDI is known for its weekly \"Special Buys.\"\n\nThen there's Kmart: a beloved discount department store, famous for the running joke of \"going in for one thing and leaving with a trolley full.\"",
+    facts:[
+      { zh:"Woolworths（Woolies）和 Coles 是澳洲兩大連鎖超市", en:"Woolworths (\"Woolies\") and Coles are the two biggest supermarket chains" },
+      { zh:"ALDI 以每週的『Special Buys』聞名", en:"ALDI is known for its weekly \"Special Buys\"" },
+      { zh:"Kmart、Target、Big W 是佈置新房間常見的採購地", en:"Kmart, Target, and Big W are go-to stops for kitting out a new room" },
+    ] },
 ];
+
+// 內容整理自你提供的《雙語詞彙補充表》
+const VOCAB_CATEGORIES = [
+  { title:"一、城市與地理", titleEn:"City & Geography", terms:[
+    { en:"Melbourne", zh:"墨爾本", note:"維多利亞州首府，澳洲第二大城市" },
+    { en:"Victoria", zh:"維多利亞州", note:"澳洲東南部的州，簡稱 VIC" },
+    { en:"CBD (Central Business District)", zh:"中央商業區", note:"相當於台灣的「市中心」或「商業核心區」" },
+    { en:"Yarra River", zh:"亞拉河", note:"流經墨爾本市中心的主要河流" },
+    { en:"Southbank", zh:"南岸", note:"Yarra River 南岸的文化藝術區" },
+    { en:"Promenade", zh:"河濱步道", note:"沿河的行人步行區" },
+    { en:"Precinct", zh:"特定區域", note:"如「arts precinct」（藝術區）" },
+    { en:"Suburb", zh:"郊區／市郊", note:"澳洲用語，指城市外圍的居住區，不一定是「郊外」" },
+    { en:"Port Phillip Bay", zh:"菲利普港灣", note:"墨爾本所在的海灣" },
+    { en:"Federation", zh:"聯邦", note:"指1901年澳洲各州合併成為一個國家的事件" },
+    { en:"Indigenous / Aboriginal", zh:"原住民", note:"Indigenous 泛指所有原住民；Aboriginal 特指澳洲大陸原住民" },
+    { en:"Wurundjeri", zh:"吳倫傑里族", note:"墨爾本 CBD 地區的原住民傳統土地擁有者" },
+  ]},
+  { title:"二、建築與歷史", titleEn:"Architecture & History", terms:[
+    { en:"Victorian era", zh:"維多利亞時代", note:"1837–1901，澳洲早期建築多為此風格" },
+    { en:"Gothic Revival", zh:"哥德復興式", note:"墨大校園的主要建築風格" },
+    { en:"French Renaissance", zh:"法國文藝復興式", note:"Flinders Street Station 的建築風格" },
+    { en:"Facade", zh:"建築正面／外牆", note:"建築物面向街道的那一面" },
+    { en:"Dome", zh:"圓頂", note:"State Library 八角形閱覽室的圓形屋頂" },
+    { en:"Arcade", zh:"拱廊", note:"有頂蓋的室內購物走廊，如 Royal Arcade" },
+    { en:"Heritage listed", zh:"列入遺產保護", note:"被政府正式認定需要保護的建築或地點" },
+    { en:"Gold Rush", zh:"淘金熱", note:"1850年代大量移民湧入澳洲尋找黃金的歷史事件" },
+    { en:"Bluestone", zh:"玄武岩（藍石）", note:"墨爾本街道鋪面常用的深色石材" },
+    { en:"Modular housing", zh:"模組化住宅", note:"在工廠預製建築模組，再運到現場組裝" },
+  ]},
+  { title:"三、藝術與文化", titleEn:"Art & Culture", terms:[
+    { en:"Mural", zh:"壁畫", note:"畫在牆上的大型藝術作品" },
+    { en:"Graffiti", zh:"塗鴉", note:"廣義指牆面文字或圖案；有時特指非法噴漆" },
+    { en:"Street art", zh:"街頭藝術", note:"通常指有藝術意圖的公共牆面創作" },
+    { en:"Contemporary art", zh:"當代藝術", note:"1960年代至今的藝術創作" },
+    { en:"Permanent collection", zh:"常設館藏", note:"博物館長期展示的核心藏品" },
+    { en:"Curator", zh:"策展人", note:"負責規劃展覽內容的專業人員" },
+    { en:"Artefact / Artifact", zh:"文物", note:"具有歷史或考古價值的人造物品" },
+    { en:"Moving image", zh:"動態影像", note:"電影、電視、動畫等，ACMI 的核心概念" },
+    { en:"Multicultural", zh:"多元文化的", note:"墨爾本的重要城市特色" },
+    { en:"Diaspora", zh:"離散族群", note:"離開原鄉散居各地的族群，如越南裔、義大利裔澳洲人" },
+  ]},
+  { title:"四、教育體系", titleEn:"Education System", terms:[
+    { en:"VET (Vocational Education and Training)", zh:"技職教育", note:"澳洲政府認可的職業技能培訓體系" },
+    { en:"TAFE", zh:"技術與繼續教育學院", note:"澳洲公立技職學院，類似台灣的技術學院" },
+    { en:"Certificate I–IV", zh:"證書一級至四級", note:"技職教育的資格等級，III 是基礎技術資格" },
+    { en:"Bachelor's Degree", zh:"學士學位", note:"澳洲通常3年，台灣4年" },
+    { en:"Honours", zh:"榮譽學士", note:"學士後額外1年的深度研究課程" },
+    { en:"IELTS", zh:"雅思英語測驗", note:"澳洲大學常用入學門檻" },
+    { en:"Credit transfer", zh:"學分抵免", note:"技職資格可抵免部分大學課程學分" },
+    { en:"Apprenticeship", zh:"學徒制（技術類）", note:"需要實作技能的學徒培訓，如木工、水電" },
+  ]},
+  { title:"五、職涯與技職", titleEn:"Careers & Trades", terms:[
+    { en:"Carpenter / Carpentry", zh:"木工師傅／木工技術", note:"從事木材建造工作的技術工人" },
+    { en:"Formwork", zh:"模板工程", note:"用模板支撐混凝土成型的建造技術" },
+    { en:"Tradesperson", zh:"技術工人", note:"需要專業技能的手工藝職業總稱" },
+    { en:"Hospitality", zh:"餐旅業", note:"包含餐廳、飯店、活動管理等服務業" },
+    { en:"Commercial kitchen", zh:"商業廚房", note:"餐廳等商業場所使用的專業廚房設備" },
+    { en:"Median salary", zh:"薪資中位數", note:"所有從業人員薪資排列後的中間值" },
+    { en:"Shortage occupation", zh:"短缺職業", note:"澳洲政府認定人才不足、需要引進的職業" },
+    { en:"Hands-on", zh:"實作的／動手做的", note:"強調親身實際操作，而非只是理論" },
+  ]},
+  { title:"六、採訪與英文溝通", titleEn:"Interviews & Communication", terms:[
+    { en:"Open-ended question", zh:"開放式問題", note:"無法只用「是」或「否」回答的問題，鼓勵對方多說" },
+    { en:"Follow-up question", zh:"追問", note:"根據對方回答繼續深入詢問" },
+    { en:"Icebreaker", zh:"破冰話題", note:"用來開啟對話、消除陌生感的輕鬆問題" },
+    { en:"Consent", zh:"同意", note:"採訪前需取得受訪者的同意" },
+    { en:"Perspective", zh:"觀點／視角", note:"某人看待事情的方式" },
+    { en:"Paraphrase", zh:"換句話說", note:"用自己的話重述對方說的內容" },
+    { en:"Body language", zh:"肢體語言", note:"非語言的溝通方式，採訪時需要觀察" },
+  ]},
+  { title:"七、澳洲生活與文化", titleEn:"Aussie Life & Culture", terms:[
+    { en:"Myki", zh:"墨爾本交通卡", note:"類似台灣的悠遊卡，搭電車、火車、巴士都要用" },
+    { en:"Tram", zh:"電車", note:"墨爾本最有特色的大眾交通工具，CBD 內免費" },
+    { en:"CBD Free Zone", zh:"CBD 免費區", note:"墨爾本 CBD 電車免費搭乘的範圍" },
+    { en:"Flat white", zh:"澳白咖啡", note:"墨爾本發源的咖啡，比 latte 奶量少" },
+    { en:"Barista", zh:"咖啡師", note:"墨爾本咖啡文化中非常受尊重的職業" },
+    { en:"AFL", zh:"澳式足球聯盟", note:"澳洲最受歡迎的體育賽事" },
+    { en:"Refugee", zh:"難民", note:"因戰爭或迫害離開原國尋求庇護的人，如越南移民背景" },
+    { en:"School holidays", zh:"學校假期", note:"7月是維州 Term 2 假期" },
+  ]},
+  { title:"八、SDGs 相關詞彙", titleEn:"SDGs Vocabulary", terms:[
+    { en:"SDG (Sustainable Development Goals)", zh:"永續發展目標", note:"聯合國 2030 議程的17個全球目標" },
+    { en:"Sustainability", zh:"永續性", note:"在不損害未來需求的前提下滿足當前需求" },
+    { en:"Biodiversity", zh:"生物多樣性", note:"地球上生物種類的豐富程度" },
+    { en:"Carbon footprint", zh:"碳足跡", note:"人類活動產生的溫室氣體排放量" },
+    { en:"Civic engagement", zh:"公民參與", note:"市民積極參與社會和政治事務" },
+    { en:"Social inclusion", zh:"社會包容", note:"確保所有人都能平等參與社會的概念" },
+    { en:"Ethical consumption", zh:"倫理消費", note:"考慮環境和社會影響的消費方式" },
+    { en:"Cultural heritage", zh:"文化遺產", note:"過去傳承下來的文化、建築、習俗等" },
+    { en:"Intercultural dialogue", zh:"跨文化對話", note:"不同文化背景的人之間的溝通與理解" },
+  ]},
+];
+
+// 內容整理自你提供的《雙語詞彙補充表》附錄：採訪常用句型卡
+const INTERVIEW_PHRASES = [
+  { title:"開場", titleEn:"Opening", phrases:[
+    "Excuse me, sorry to bother you.",
+    "Hi, we're students from Taiwan visiting Melbourne.",
+    "Would you mind if we asked you a few questions in English?",
+    "It'll only take about 5 minutes.",
+    "We're working on a project about Melbourne.",
+  ]},
+  { title:"採訪中", titleEn:"During the Interview", phrases:[
+    "Could you tell me more about that?",
+    "That's really interesting. Why do you think that is?",
+    "What do you mean by...?",
+    "How long have you been doing this?",
+    "What's the best / hardest part of your job?",
+    "If you could change one thing, what would it be?",
+  ]},
+  { title:"採訪結束", titleEn:"Wrapping Up", phrases:[
+    "Thank you so much for your time.",
+    "That was really helpful.",
+    "We really appreciate it.",
+    "Have a great day!",
+  ]},
+  { title:"緊急救援句", titleEn:"If You Get Stuck", phrases:[
+    "Sorry, could you say that again more slowly?",
+    "I'm not sure I understood. Could you explain?",
+    "How do you spell that?",
+    "My English isn't perfect, but I think you mean...?",
+  ]},
+];
+
+function renderRefAccordion(containerId, headingHtml, items, bodyFn){
+  const el = document.getElementById(containerId);
+  el.innerHTML = `
+    ${headingHtml}
+    <div class="spot-list">
+      ${items.map((item, i) => `
+        <div class="spot" data-ref="${i}">
+          <button class="spot-header">
+            <span class="spot-header-text">${item.title}<span class="spot-tagline">${item.titleEn ? `<span class="en">${item.titleEn}</span>` : ''}</span></span>
+            <span class="chev">⌄</span>
+          </button>
+          <div class="spot-body"><div class="spot-body-inner">${bodyFn(item)}</div></div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  wireAccordion(el);
+}
+
+function renderVocab(query){
+  const q = (query || '').trim().toLowerCase();
+  const filtered = !q ? VOCAB_CATEGORIES : VOCAB_CATEGORIES
+    .map(cat => ({ ...cat, terms: cat.terms.filter(t =>
+      t.en.toLowerCase().includes(q) || t.zh.toLowerCase().includes(q) || t.note.toLowerCase().includes(q)
+    ) }))
+    .filter(cat => cat.terms.length > 0);
+
+  const el = document.getElementById('vocabSection');
+  el.innerHTML = `
+    <h3>常用詞彙・Vocabulary</h3>
+    <div class="sub">雙語詞彙補充表，點分類展開查看，或直接搜尋單字</div>
+    <input type="text" class="vocab-search" id="vocabSearch" placeholder="搜尋單字・Search a word..." value="${query ? query.replace(/"/g,'&quot;') : ''}">
+    ${filtered.length ? `<div class="spot-list">
+      ${filtered.map((cat, i) => `
+        <div class="spot${q ? ' open' : ''}" data-ref="${i}">
+          <button class="spot-header">
+            <span class="spot-header-text">${cat.title}<span class="spot-tagline"><span class="en">${cat.titleEn}</span></span></span>
+            <span class="chev">⌄</span>
+          </button>
+          <div class="spot-body"><div class="spot-body-inner">
+            <ul class="term-list">
+              ${cat.terms.map(t => `<li><span class="term-en">${t.en}</span><span class="term-zh">${t.zh}</span><span class="term-note">${t.note}</span></li>`).join('')}
+            </ul>
+          </div></div>
+        </div>
+      `).join('')}
+    </div>` : `<div class="vocab-empty">沒有符合的詞彙・No matching terms</div>`}
+  `;
+  wireAccordion(el);
+  if (q) {
+    el.querySelectorAll('.spot.open .spot-body').forEach(body => { body.style.maxHeight = body.scrollHeight + 'px'; });
+  }
+  const searchInput = document.getElementById('vocabSearch');
+  searchInput.addEventListener('input', () => {
+    const cursorPos = searchInput.selectionStart;
+    const val = searchInput.value;
+    renderVocab(val);
+    const newInput = document.getElementById('vocabSearch');
+    newInput.focus();
+    newInput.setSelectionRange(cursorPos, cursorPos);
+  });
+}
+
+function renderInterviewToolkit(){
+  renderRefAccordion('interviewSection', `
+    <h3>採訪小幫手・Interview Toolkit</h3>
+    <div class="sub">街頭英文採訪任務可以直接用的句子</div>
+  `, INTERVIEW_PHRASES, (grp) => `
+    <ul class="phrase-list">
+      ${grp.phrases.map(p => `<li>${p}</li>`).join('')}
+    </ul>
+  `);
+}
 
 const today = taipeiToday();
 let currentIndex = DAYS.findIndex(d => d.date === today);
@@ -615,6 +1241,13 @@ function planFields(d, index){
   return { place, am, pm, eve };
 }
 
+function tipListHtml(items, cls){
+  if (!items || !items.length) return '';
+  return `<ol class="tip-list ${cls}">${items.map((t,i) => `
+    <li><span class="tip-num">${i+1}</span><span class="tip-text">${t.zh}<span class="en">${t.en}</span></span></li>
+  `).join('')}</ol>`;
+}
+
 function renderSpot(s, i){
   return `
     <div class="spot" data-spot="${i}">
@@ -623,8 +1256,10 @@ function renderSpot(s, i){
         <span class="chev">⌄</span>
       </button>
       <div class="spot-body"><div class="spot-body-inner">
-        <div class="spot-block"><div class="spot-block-label">📖 景點故事</div><p>${s.zh}</p><p class="en">${s.en}</p></div>
-        ${s.photo ? `<div class="spot-block"><div class="spot-block-label">📷 拍攝手法</div><p>${s.photo}</p></div>` : ''}
+        <div class="spot-block"><div class="spot-block-label">📖 景點故事 · THE STORY</div><p>${s.zh}</p><p class="en">${s.en}</p></div>
+        ${s.facts && s.facts.length ? `<div class="spot-block"><div class="spot-block-label">🔑 小知識 · QUICK FACTS</div>${tipListHtml(s.facts, 'facts')}</div>` : ''}
+        ${s.photoTips && s.photoTips.length ? `<div class="spot-block"><div class="spot-block-label">📷 拍攝手法 · PHOTO TIPS</div>${tipListHtml(s.photoTips, 'photo')}</div>` : ''}
+        ${s.think && s.think.length ? `<div class="spot-block"><div class="spot-block-label">💭 想一想 · THINK ABOUT IT</div>${tipListHtml(s.think, 'think')}</div>` : ''}
         <div class="spot-links">
           <a href="${mapsLink(s.name)}" target="_blank" rel="noopener">📍 Google 地圖</a>
           <a href="${transitLink(s.name)}" target="_blank" rel="noopener">🚌 大眾運輸路線</a>
@@ -673,8 +1308,21 @@ function renderCard(){
     <div class="plan-note">機票尚未確定，以下先依你選擇的方案顯示，兩案回程航班相同（CI58）</div>
   ` : '';
   const spots = SPOTS[selectedIndex] || [];
+  const showTasks = selectedIndex >= 2 && selectedIndex <= 10;
+  const state = showTasks ? getTaskState(selectedIndex) : null;
+  const doneCount = state ? state.filter(Boolean).length : 0;
+  const taskHtml = showTasks ? `
+    <div class="task-checklist">
+      <div class="task-checklist-head"><span>✅ 今日任務 · TODAY'S TASKS</span><span class="task-progress">${doneCount}/${TASKS.length}</span></div>
+      <ul>
+        ${TASKS.map((t, i) => `
+          <li><label class="${state[i] ? 'done' : ''}"><input type="checkbox" data-task="${i}" ${state[i] ? 'checked' : ''}>${t.zh}<span class="en">${t.en}</span></label></li>
+        `).join('')}
+      </ul>
+    </div>
+  ` : '';
   const spotsHtml = spots.length ? `
-    <div class="spot-note">點景點名稱展開中英雙語景點故事、拍攝手法跟快速連結</div>
+    <div class="spot-note">點景點名稱展開中英雙語景點故事、小知識、拍攝手法、想一想跟快速連結</div>
     <div class="spot-list">
       ${spots.map((s, i) => renderSpot(s, i)).join('')}
     </div>
@@ -686,20 +1334,30 @@ function renderCard(){
       <div class="place">${f.place}</div>
     </div>
     ${toggleHtml}
-    <div class="segments">
-      <div class="segment am">
-        <div class="segment-label"><span class="icon">☀️</span>上午</div>
-        <div class="segment-body">${f.am}</div>
+    <div class="timeline">
+      <div class="timeline-item am">
+        <div class="timeline-marker">☀️</div>
+        <div class="timeline-content">
+          <div class="timeline-label">上午 · MORNING</div>
+          <div class="timeline-text">${f.am}</div>
+        </div>
       </div>
-      <div class="segment pm">
-        <div class="segment-label"><span class="icon">🌇</span>下午</div>
-        <div class="segment-body">${f.pm}</div>
+      <div class="timeline-item pm">
+        <div class="timeline-marker">🌇</div>
+        <div class="timeline-content">
+          <div class="timeline-label">下午 · AFTERNOON</div>
+          <div class="timeline-text">${f.pm}</div>
+        </div>
       </div>
-      <div class="segment eve">
-        <div class="segment-label"><span class="icon">🌙</span>晚上</div>
-        <div class="segment-body">${f.eve}</div>
+      <div class="timeline-item eve">
+        <div class="timeline-marker">🌙</div>
+        <div class="timeline-content">
+          <div class="timeline-label">晚上 · EVENING</div>
+          <div class="timeline-text">${f.eve}</div>
+        </div>
       </div>
     </div>
+    ${taskHtml}
     ${d.flight ? `<div style="padding:0 22px 20px;"><div class="banner flight">✈️ 今天有搭機行程，請提前確認證件與行李</div></div>` : ``}
     ${spotsHtml}
     <div style="padding: 4px 22px 22px;">
@@ -717,10 +1375,21 @@ function renderCard(){
   });
   card.querySelectorAll('.spot').forEach(el => el.classList.remove('open'));
   wireAccordion(card);
+  card.querySelectorAll('.task-checklist input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const i = parseInt(cb.dataset.task);
+      const s = getTaskState(selectedIndex);
+      s[i] = cb.checked;
+      cb.closest('label').classList.toggle('done', cb.checked);
+      const done = s.filter(Boolean).length;
+      const badge = card.querySelector('.task-progress');
+      if (badge) badge.textContent = `${done}/${TASKS.length}`;
+    });
+  });
   const prevBtn = card.querySelector('#prevDay');
   const nextBtn = card.querySelector('#nextDay');
-  if (prevBtn) prevBtn.addEventListener('click', () => { if (selectedIndex > 0){ selectedIndex--; render(); } });
-  if (nextBtn) nextBtn.addEventListener('click', () => { if (selectedIndex < DAYS.length - 1){ selectedIndex++; render(); } });
+  if (prevBtn) prevBtn.addEventListener('click', () => { if (selectedIndex > 0){ selectedIndex--; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
+  if (nextBtn) nextBtn.addEventListener('click', () => { if (selectedIndex < DAYS.length - 1){ selectedIndex++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
 }
 
 function render(){
@@ -731,8 +1400,24 @@ function render(){
   if (activeStop) activeStop.scrollIntoView({ inline: 'center', block: 'nearest' });
 }
 
+function initTheme(){
+  const btn = document.getElementById('themeToggle');
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (prefersDark) {
+    document.body.classList.add('dark-mode');
+    btn.textContent = '☀️';
+  }
+  btn.addEventListener('click', () => {
+    const isDark = document.body.classList.toggle('dark-mode');
+    btn.textContent = isDark ? '☀️' : '🌙';
+  });
+}
+
 render();
 renderExtras();
+renderVocab();
+renderInterviewToolkit();
+initTheme();
 </script>
 
 </body>
