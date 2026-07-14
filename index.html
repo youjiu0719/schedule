@@ -578,6 +578,58 @@
   .schedule-row:last-child{ border-bottom:none; }
   .schedule-time{ flex: 0 0 92px; font-family: var(--font-mono); font-size: 12px; color: var(--brick); padding-top:1px; }
   .schedule-text{ flex:1; font-size: 14px; color: var(--ink); }
+
+  /* ---------- Day view tabs ---------- */
+  .view-tabs{
+    display:flex; gap:8px;
+    padding: 4px 22px 14px;
+  }
+  .view-tab{
+    flex:1;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--ink-muted);
+    cursor:pointer;
+  }
+  .view-tab.active{ background: var(--teal); border-color: var(--teal); color:#fff; }
+
+  /* ---------- Custom expense rows ---------- */
+  .expense-add-row{ display:flex; gap:8px; margin-top: 4px; }
+  .expense-add-row input[type="text"]{
+    flex:1;
+    font-family: var(--font-body);
+    font-size: 13px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .expense-add-btn{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px dashed var(--line);
+    background: none;
+    color: var(--teal);
+    cursor:pointer;
+  }
+  .meal-row .remove-expense{
+    flex-shrink:0;
+    width:24px; height:24px;
+    border-radius:50%;
+    border:none;
+    background: var(--bg-alt);
+    color: var(--ink-muted);
+    cursor:pointer;
+    font-size:12px;
+  }
 </style>
 </head>
 <body>
@@ -633,21 +685,80 @@ const FLIGHT_PLANS = {
   }
 };
 let selectedPlan = 1;
+let activeTab = 'itinerary'; // 'itinerary' | 'log'
 
-// 出門前先想想：學生可以挑選的生活紀錄小任務，每天都適用，抵達日額外加碼
-const SHARED_TASKS = [
-  { icon:"🥐", zh:"早餐怎麼準備的", en:"How I made my own breakfast" },
-  { icon:"🚋", zh:"今天怎麼移動的", en:"How I got around today" },
-  { icon:"🛒", zh:"我在超市／店裡買了什麼", en:"What I bought at the supermarket or a shop" },
-  { icon:"📸", zh:"今天最喜歡的一個瞬間", en:"My favorite moment today" },
-  { icon:"🗣️", zh:"今天學到的一句話／一次對話", en:"A word or conversation I had today" },
-  { icon:"🍽️", zh:"三餐開箱", en:"Unboxing my breakfast / lunch / dinner" },
-];
-const ARRIVAL_EXTRA_TASKS = [
-  { icon:"🏨", zh:"我的住宿環境巡禮", en:"A tour of where I'm staying" },
-];
+// 出門前先想想：每一天根據當天實際行程客製化的生活紀錄小任務（至少3個）
+const DAY_TASKS = {
+  0: [
+    { icon:"🧳", zh:"行李打包全紀錄", en:"Packing my suitcase" },
+    { icon:"✈️", zh:"機場報到／登機瞬間", en:"Airport check-in or boarding moment" },
+    { icon:"👋", zh:"跟家人道別的瞬間", en:"Saying goodbye to family" },
+  ],
+  1: [
+    { icon:"🏨", zh:"我的住宿環境巡禮", en:"A tour of where I'm staying" },
+    { icon:"🛒", zh:"超市戰利品開箱", en:"What I bought at the supermarket" },
+    { icon:"🌏", zh:"落地墨爾本的第一印象", en:"My first impression after landing" },
+    { icon:"🚕", zh:"機場到飯店的路上", en:"The ride from the airport to the hotel" },
+  ],
+  2: [
+    { icon:"🥐", zh:"早餐怎麼準備的", en:"How I made my own breakfast" },
+    { icon:"🚋", zh:"第一次搭墨爾本電車", en:"My first Melbourne tram ride" },
+    { icon:"🕰️", zh:"在福林德斯車站鐘樓下拍一張", en:"A photo under the Flinders St clocks" },
+    { icon:"🎬", zh:"在 Federation Square 拍的一張照片", en:"A photo at Federation Square" },
+  ],
+  3: [
+    { icon:"🍎", zh:"女王市場戰利品", en:"What I bought at Queen Victoria Market" },
+    { icon:"📚", zh:"圖書館裡我最喜歡的角落", en:"My favorite corner of the library" },
+    { icon:"🥪", zh:"今天午餐吃了什麼", en:"What I had for lunch" },
+  ],
+  4: [
+    { icon:"🎓", zh:"領到證書的瞬間", en:"The moment I got my certificate" },
+    { icon:"🏛️", zh:"校園裡我最喜歡的一棟建築", en:"My favorite building on campus" },
+    { icon:"🍝", zh:"在 Lygon Street 吃了什麼", en:"What I ate on Lygon Street" },
+  ],
+  5: [
+    { icon:"🔬", zh:"我最喜歡的科學展覽", en:"My favorite science exhibit" },
+    { icon:"🌅", zh:"Williamstown 海港邊拍的照片", en:"A photo at the Williamstown waterfront" },
+    { icon:"🚆", zh:"搭火車去 Spotswood 的路上", en:"The train ride out to Spotswood" },
+  ],
+  6: [
+    { icon:"🛍️", zh:"在 Royal Arcade 拱廊拍照", en:"A photo inside Royal Arcade" },
+    { icon:"🕐", zh:"Gog 與 Magog 敲鐘的瞬間", en:"Gog and Magog striking the bell" },
+    { icon:"🗺️", zh:"今天自己安排的行程", en:"What I chose to do on my own today" },
+  ],
+  7: [
+    { icon:"🎨", zh:"我最喜歡的一幅塗鴉", en:"My favorite piece of street art" },
+    { icon:"🖼️", zh:"NGV 裡我最喜歡的作品", en:"My favorite artwork at NGV" },
+    { icon:"💧", zh:"在入口水牆前拍一張", en:"A photo at the entrance water wall" },
+  ],
+  8: [
+    { icon:"👨‍🍳", zh:"我在廚房做了什麼", en:"What I made in the kitchen" },
+    { icon:"🍜", zh:"在 Victoria Street 吃了什麼", en:"What I ate on Victoria Street" },
+    { icon:"🥢", zh:"今天學到的一個餐旅小知識", en:"A hospitality fact I learned today" },
+  ],
+  9: [
+    { icon:"🏫", zh:"在 RMIT 校園拍的照片", en:"A photo on the RMIT campus" },
+    { icon:"🦖", zh:"博物館裡我最喜歡的展區", en:"My favorite gallery in the museum" },
+    { icon:"🐎", zh:"看到 Phar Lap 標本的心得", en:"My reaction to seeing Phar Lap" },
+  ],
+  10: [
+    { icon:"🔨", zh:"我今天做的木工作品", en:"What I built today" },
+    { icon:"👷", zh:"工地服裝或安全裝備開箱", en:"My safety gear or worksite outfit" },
+    { icon:"💬", zh:"跟師傅的一次對話", en:"A conversation with an instructor" },
+  ],
+  11: [
+    { icon:"🎒", zh:"打包行李、整理戰利品", en:"Packing up my souvenirs" },
+    { icon:"📋", zh:"這12天最難忘的瞬間", en:"My most memorable moment of the trip" },
+    { icon:"✈️", zh:"登機前的最後一刻", en:"The last moment before boarding" },
+  ],
+  12: [
+    { icon:"🏠", zh:"回到家的第一句話", en:"The first thing I said arriving home" },
+    { icon:"🧳", zh:"打開行李箱的瞬間", en:"Unpacking my suitcase" },
+    { icon:"💭", zh:"這趟旅程教我的一件事", en:"One thing this trip taught me" },
+  ],
+};
 function getTaskOptions(dayIndex){
-  return dayIndex === 1 ? SHARED_TASKS.concat(ARRIVAL_EXTRA_TASKS) : SHARED_TASKS;
+  return DAY_TASKS[dayIndex] || [];
 }
 const selectedTasks = {}; // { [dayIndex]: Set of selected task indices } — resets on reload
 function getSelectedTasks(dayIndex){
@@ -655,7 +766,7 @@ function getSelectedTasks(dayIndex){
   return selectedTasks[dayIndex];
 }
 
-// 三餐紀錄與花費（金額 + 是否拍照），僅存在當次瀏覽記憶體中
+// 三餐紀錄與花費（金額 + 是否拍照）＋ 其他花費（可自行新增項目），僅存在當次瀏覽記憶體中
 const MEALS = [
   { key:"breakfast", zh:"早餐", en:"Breakfast" },
   { key:"lunch", zh:"午餐", en:"Lunch" },
@@ -668,6 +779,11 @@ function getMealState(dayIndex){
     MEALS.forEach(m => { mealState[dayIndex][m.key] = { amount:'', photo:false }; });
   }
   return mealState[dayIndex];
+}
+const otherExpenses = {}; // { [dayIndex]: [{ label, amount }] }
+function getOtherExpenses(dayIndex){
+  if (!otherExpenses[dayIndex]) otherExpenses[dayIndex] = [];
+  return otherExpenses[dayIndex];
 }
 
 const DAYS = [
@@ -1432,10 +1548,13 @@ function renderCard(){
   `;
 
   const meals = getMealState(selectedIndex);
-  const total = MEALS.reduce((sum, m) => sum + (parseFloat(meals[m.key].amount) || 0), 0);
+  const others = getOtherExpenses(selectedIndex);
+  const mealTotal = MEALS.reduce((sum, m) => sum + (parseFloat(meals[m.key].amount) || 0), 0);
+  const otherTotal = others.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+  const total = mealTotal + otherTotal;
   const mealLogHtml = `
     <div class="meal-log">
-      <div class="meal-log-head"><span>🍽️ 三餐紀錄與花費 · MEALS & EXPENSES</span><span class="meal-total">AUD $${total.toFixed(0)}</span></div>
+      <div class="meal-log-head"><span>🍽️ 三餐與其他花費 · MEALS & EXPENSES</span><span class="meal-total">AUD $${total.toFixed(0)}</span></div>
       ${MEALS.map(m => `
         <div class="meal-row" data-meal="${m.key}">
           <div class="meal-name">${m.zh}</div>
@@ -1443,6 +1562,16 @@ function renderCard(){
           <label class="photo-toggle"><input type="checkbox" ${meals[m.key].photo ? 'checked' : ''}>📷 拍照了</label>
         </div>
       `).join('')}
+      ${others.map((o, i) => `
+        <div class="meal-row" data-other="${i}">
+          <input type="text" class="expense-label-input" style="flex:0 0 90px; font-size:13px; padding:6px 8px; border-radius:6px; border:1px solid var(--line); background:var(--surface); color:var(--ink);" placeholder="項目名稱" value="${o.label}">
+          <div class="meal-input-wrap"><span>AUD $</span><input type="number" min="0" step="0.5" placeholder="0" value="${o.amount}"></div>
+          <button class="remove-expense" title="刪除">✕</button>
+        </div>
+      `).join('')}
+      <div class="expense-add-row">
+        <button class="expense-add-btn" id="addExpenseBtn">＋ 新增項目 · Add expense</button>
+      </div>
     </div>
   `;
 
@@ -1452,35 +1581,43 @@ function renderCard(){
       <h2>${mmdd(d.date)}（${d.wd}）</h2>
       <div class="place">${f.place}</div>
     </div>
-    ${toggleHtml}
-    <div class="timeline">
-      <div class="timeline-item am">
-        <div class="timeline-marker">☀️</div>
-        <div class="timeline-content">
-          <div class="timeline-label">上午 · MORNING</div>
-          <div class="timeline-text">${f.am}</div>
-        </div>
-      </div>
-      <div class="timeline-item pm">
-        <div class="timeline-marker">🌇</div>
-        <div class="timeline-content">
-          <div class="timeline-label">下午 · AFTERNOON</div>
-          <div class="timeline-text">${f.pm}</div>
-        </div>
-      </div>
-      <div class="timeline-item eve">
-        <div class="timeline-marker">🌙</div>
-        <div class="timeline-content">
-          <div class="timeline-label">晚上 · EVENING</div>
-          <div class="timeline-text">${f.eve}</div>
-        </div>
-      </div>
+    <div class="view-tabs">
+      <button class="view-tab${activeTab === 'itinerary' ? ' active' : ''}" data-tab="itinerary">🗺️ 行程</button>
+      <button class="view-tab${activeTab === 'log' ? ' active' : ''}" data-tab="log">📝 紀錄與拍攝</button>
     </div>
-    ${scheduleHtml}
-    ${d.flight ? `<div style="padding:0 22px 20px;"><div class="banner flight">✈️ 今天有搭機行程，請提前確認證件與行李</div></div>` : ``}
-    ${taskMenuHtml}
-    ${mealLogHtml}
-    ${spotsHtml}
+    <div class="tab-panel" data-panel="itinerary" style="${activeTab === 'itinerary' ? '' : 'display:none;'}">
+      ${toggleHtml}
+      <div class="timeline">
+        <div class="timeline-item am">
+          <div class="timeline-marker">☀️</div>
+          <div class="timeline-content">
+            <div class="timeline-label">上午 · MORNING</div>
+            <div class="timeline-text">${f.am}</div>
+          </div>
+        </div>
+        <div class="timeline-item pm">
+          <div class="timeline-marker">🌇</div>
+          <div class="timeline-content">
+            <div class="timeline-label">下午 · AFTERNOON</div>
+            <div class="timeline-text">${f.pm}</div>
+          </div>
+        </div>
+        <div class="timeline-item eve">
+          <div class="timeline-marker">🌙</div>
+          <div class="timeline-content">
+            <div class="timeline-label">晚上 · EVENING</div>
+            <div class="timeline-text">${f.eve}</div>
+          </div>
+        </div>
+      </div>
+      ${scheduleHtml}
+      ${d.flight ? `<div style="padding:0 22px 20px;"><div class="banner flight">✈️ 今天有搭機行程，請提前確認證件與行李</div></div>` : ``}
+      ${spotsHtml}
+    </div>
+    <div class="tab-panel" data-panel="log" style="${activeTab === 'log' ? '' : 'display:none;'}">
+      ${taskMenuHtml}
+      ${mealLogHtml}
+    </div>
     <div style="padding: 4px 22px 22px;">
       <div class="day-nav">
         <button id="prevDay" ${selectedIndex === 0 ? 'disabled' : ''}>← 前一天</button>
@@ -1488,6 +1625,12 @@ function renderCard(){
       </div>
     </div>
   `;
+  card.querySelectorAll('.view-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeTab = btn.dataset.tab;
+      renderCard();
+    });
+  });
   card.querySelectorAll('.plan-pill').forEach(btn => {
     btn.addEventListener('click', () => {
       selectedPlan = parseInt(btn.dataset.plan);
@@ -1502,17 +1645,32 @@ function renderCard(){
       chip.classList.toggle('selected');
     });
   });
-  card.querySelectorAll('.meal-row').forEach(row => {
+  function refreshTotal(){
+    const newMealTotal = MEALS.reduce((sum, m) => sum + (parseFloat(meals[m.key].amount) || 0), 0);
+    const newOtherTotal = getOtherExpenses(selectedIndex).reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+    const badge = card.querySelector('.meal-total');
+    if (badge) badge.textContent = `AUD $${(newMealTotal + newOtherTotal).toFixed(0)}`;
+  }
+  card.querySelectorAll('.meal-row[data-meal]').forEach(row => {
     const key = row.dataset.meal;
     const input = row.querySelector('input[type="number"]');
     const checkbox = row.querySelector('input[type="checkbox"]');
-    input.addEventListener('input', () => {
-      meals[key].amount = input.value;
-      const newTotal = MEALS.reduce((sum, m) => sum + (parseFloat(meals[m.key].amount) || 0), 0);
-      const badge = card.querySelector('.meal-total');
-      if (badge) badge.textContent = `AUD $${newTotal.toFixed(0)}`;
-    });
+    input.addEventListener('input', () => { meals[key].amount = input.value; refreshTotal(); });
     checkbox.addEventListener('change', () => { meals[key].photo = checkbox.checked; });
+  });
+  card.querySelectorAll('.meal-row[data-other]').forEach(row => {
+    const i = parseInt(row.dataset.other);
+    const textInput = row.querySelector('input[type="text"]');
+    const numInput = row.querySelector('input[type="number"]');
+    const removeBtn = row.querySelector('.remove-expense');
+    textInput.addEventListener('input', () => { others[i].label = textInput.value; });
+    numInput.addEventListener('input', () => { others[i].amount = numInput.value; refreshTotal(); });
+    removeBtn.addEventListener('click', () => { others.splice(i, 1); renderCard(); });
+  });
+  const addExpenseBtn = card.querySelector('#addExpenseBtn');
+  if (addExpenseBtn) addExpenseBtn.addEventListener('click', () => {
+    others.push({ label:'其他花費', amount:'' });
+    renderCard();
   });
   card.querySelectorAll('.spot').forEach(el => el.classList.remove('open'));
   wireAccordion(card);
