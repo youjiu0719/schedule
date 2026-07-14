@@ -504,6 +504,80 @@
     margin-bottom: 12px;
   }
   .vocab-empty{ font-size: 12.5px; color: var(--ink-muted); padding: 8px 2px; }
+
+  /* ---------- Daily task menu ---------- */
+  .task-menu{ margin: 0 22px 4px; }
+  .task-menu-head{
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: var(--teal);
+    margin-bottom: 8px;
+  }
+  .task-menu-sub{ font-size: 12px; color: var(--ink-muted); margin: -6px 0 8px; }
+  .task-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .task-chip{
+    font-family: var(--font-body);
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--ink);
+    cursor:pointer;
+    display:flex; align-items:center; gap:6px;
+  }
+  .task-chip .en{ font-size: 10.5px; color: var(--ink-muted); }
+  .task-chip.selected{ background: var(--teal); border-color: var(--teal); color:#fff; }
+  .task-chip.selected .en{ color: rgba(255,255,255,0.75); }
+
+  /* ---------- Meal / expense log ---------- */
+  .meal-log{ margin: 14px 22px 4px; background: var(--bg); border-radius: 10px; padding: 12px 14px; }
+  .meal-log-head{
+    display:flex; align-items:center; justify-content:space-between;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: var(--teal);
+    margin-bottom: 10px;
+  }
+  .meal-total{ background: var(--teal-soft); color: var(--teal); padding: 2px 8px; border-radius: 999px; font-weight:700; }
+  .meal-row{ display:flex; align-items:center; gap:10px; padding: 7px 0; border-bottom: 1px dashed var(--line); }
+  .meal-row:last-child{ border-bottom:none; }
+  .meal-row .meal-name{ flex: 0 0 64px; font-size: 13.5px; color: var(--ink); }
+  .meal-row .meal-input-wrap{ flex:1; display:flex; align-items:center; gap:4px; }
+  .meal-row .meal-input-wrap span{ font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); }
+  .meal-row input[type="number"]{
+    width: 72px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .meal-row .photo-toggle{
+    display:flex; align-items:center; gap:5px;
+    font-size: 12px; color: var(--ink-muted);
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .meal-row input[type="checkbox"]{ width:16px; height:16px; accent-color: var(--teal); }
+
+  /* ---------- Detailed schedule ---------- */
+  .day-schedule{ margin: 0 22px 18px; }
+  .day-schedule-head{
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: var(--brick);
+    margin-bottom: 8px;
+  }
+  .schedule-row{ display:flex; gap:12px; padding: 8px 0; border-bottom: 1px solid #F0F2EF; }
+  .schedule-row:last-child{ border-bottom:none; }
+  .schedule-time{ flex: 0 0 92px; font-family: var(--font-mono); font-size: 12px; color: var(--brick); padding-top:1px; }
+  .schedule-text{ flex:1; font-size: 14px; color: var(--ink); }
 </style>
 </head>
 <body>
@@ -560,12 +634,55 @@ const FLIGHT_PLANS = {
 };
 let selectedPlan = 1;
 
+// 出門前先想想：學生可以挑選的生活紀錄小任務，每天都適用，抵達日額外加碼
+const SHARED_TASKS = [
+  { icon:"🥐", zh:"早餐怎麼準備的", en:"How I made my own breakfast" },
+  { icon:"🚋", zh:"今天怎麼移動的", en:"How I got around today" },
+  { icon:"🛒", zh:"我在超市／店裡買了什麼", en:"What I bought at the supermarket or a shop" },
+  { icon:"📸", zh:"今天最喜歡的一個瞬間", en:"My favorite moment today" },
+  { icon:"🗣️", zh:"今天學到的一句話／一次對話", en:"A word or conversation I had today" },
+  { icon:"🍽️", zh:"三餐開箱", en:"Unboxing my breakfast / lunch / dinner" },
+];
+const ARRIVAL_EXTRA_TASKS = [
+  { icon:"🏨", zh:"我的住宿環境巡禮", en:"A tour of where I'm staying" },
+];
+function getTaskOptions(dayIndex){
+  return dayIndex === 1 ? SHARED_TASKS.concat(ARRIVAL_EXTRA_TASKS) : SHARED_TASKS;
+}
+const selectedTasks = {}; // { [dayIndex]: Set of selected task indices } — resets on reload
+function getSelectedTasks(dayIndex){
+  if (!selectedTasks[dayIndex]) selectedTasks[dayIndex] = new Set();
+  return selectedTasks[dayIndex];
+}
+
+// 三餐紀錄與花費（金額 + 是否拍照），僅存在當次瀏覽記憶體中
+const MEALS = [
+  { key:"breakfast", zh:"早餐", en:"Breakfast" },
+  { key:"lunch", zh:"午餐", en:"Lunch" },
+  { key:"dinner", zh:"晚餐", en:"Dinner" },
+];
+const mealState = {}; // { [dayIndex]: { breakfast:{amount, photo}, lunch:{...}, dinner:{...} } }
+function getMealState(dayIndex){
+  if (!mealState[dayIndex]) {
+    mealState[dayIndex] = {};
+    MEALS.forEach(m => { mealState[dayIndex][m.key] = { amount:'', photo:false }; });
+  }
+  return mealState[dayIndex];
+}
+
 const DAYS = [
   { date:"2026-07-13", wd:"一", place:"出發日", am:"行前準備", pm:"集合及機場報到", eve:"", flight:true, planToggle:true },
   { date:"2026-07-14", wd:"二", place:"", am:"", pm:"", eve:"機場接送、入住住宿地點、休息／Box Hill", flight:true, planToggle:true },
   { date:"2026-07-15", wd:"三", place:"墨爾本市區", am:"Flinders Street Station、墨爾本市區交通探索", pm:"Federation Square、ACMI 澳洲動態影像中心", eve:"學習紀錄及活動整理／Box Hill" },
   { date:"2026-07-16", wd:"四", place:"墨爾本市區", am:"Queen Victoria Market 維多利亞女王市場", pm:"State Library of Victoria 維多利亞州立圖書館", eve:"學習紀錄及活動整理／Box Hill" },
-  { date:"2026-07-17", wd:"五", place:"大學參訪／小義大利", am:"University of Melbourne 墨爾本大學", pm:"Lygon Street 小義大利", eve:"學習紀錄及活動整理／Box Hill" },
+  { date:"2026-07-17", wd:"五", place:"大學參訪／小義大利", am:"University of Melbourne 墨爾本大學（正式接待行程，詳見下方時間表）", pm:"Lygon Street 小義大利", eve:"學習紀錄及活動整理／Box Hill",
+    schedule:[
+      { time:"9:30 am", zh:"歡迎儀式", en:"Welcome ceremony" },
+      { time:"9:40 am–12:00 pm", zh:"墨大教授提供 Workshop：青年職業和領導力發展專題", en:"Professor-led workshop: Youth Career & Leadership Development" },
+      { time:"12:00–1:30 pm", zh:"午餐時間（墨大官方行程不含餐，可在校園內餐廳用餐）", en:"Lunch (not included in the official program — dine at campus restaurants)" },
+      { time:"1:30–3:30 pm", zh:"墨大歷史文化學術氛圍介紹、校園及教學樓導覽解說、科技展覽館參訪", en:"Intro to UniMelb's history & academic culture, guided campus/building tour, tech exhibition hall visit" },
+      { time:"3:30–4:00 pm", zh:"總結研學內容、頒發證書、合影留念", en:"Program wrap-up, certificate presentation, group photo" },
+    ] },
   { date:"2026-07-18", wd:"六", place:"科學博物館／海港", am:"Scienceworks 科學博物館", pm:"Williamstown 海港地區探索", eve:"學習紀錄及活動整理／Box Hill" },
   { date:"2026-07-19", wd:"日", place:"自由探索日", am:"Royal Arcade 皇家拱廊、墨爾本市區探索", pm:"拍攝素材及學習成果整理", eve:"團體交流及內容檢視／Box Hill" },
   { date:"2026-07-20", wd:"一", place:"街頭藝術／美術館", am:"Hosier Lane 塗鴉街及城市藝術探索", pm:"NGV 維多利亞國家美術館", eve:"學習紀錄及活動整理／Box Hill" },
@@ -1287,6 +1404,48 @@ function renderCard(){
       ${spots.map((s, i) => renderSpot(s, i)).join('')}
     </div>
   ` : '';
+
+  const scheduleHtml = d.schedule ? `
+    <div class="day-schedule">
+      <div class="day-schedule-head">🗓️ 詳細時間表 · DETAILED SCHEDULE</div>
+      ${d.schedule.map(row => `
+        <div class="schedule-row">
+          <div class="schedule-time">${row.time}</div>
+          <div class="schedule-text">${row.zh}<br><span style="color:var(--ink-muted); font-size:12.5px;">${row.en}</span></div>
+        </div>
+      `).join('')}
+    </div>
+  ` : '';
+
+  const taskOptions = getTaskOptions(selectedIndex);
+  const selected = getSelectedTasks(selectedIndex);
+  const taskMenuHtml = `
+    <div class="task-menu">
+      <div class="task-menu-head">🎬 出門前先想想 · BEFORE YOU HEAD OUT</div>
+      <div class="task-menu-sub">今天可以挑一個（或多個）拍下來記錄</div>
+      <div class="task-chips">
+        ${taskOptions.map((t, i) => `
+          <button class="task-chip${selected.has(i) ? ' selected' : ''}" data-task-idx="${i}">${t.icon} ${t.zh}<span class="en">${t.en}</span></button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
+  const meals = getMealState(selectedIndex);
+  const total = MEALS.reduce((sum, m) => sum + (parseFloat(meals[m.key].amount) || 0), 0);
+  const mealLogHtml = `
+    <div class="meal-log">
+      <div class="meal-log-head"><span>🍽️ 三餐紀錄與花費 · MEALS & EXPENSES</span><span class="meal-total">AUD $${total.toFixed(0)}</span></div>
+      ${MEALS.map(m => `
+        <div class="meal-row" data-meal="${m.key}">
+          <div class="meal-name">${m.zh}</div>
+          <div class="meal-input-wrap"><span>AUD $</span><input type="number" min="0" step="0.5" placeholder="0" value="${meals[m.key].amount}"></div>
+          <label class="photo-toggle"><input type="checkbox" ${meals[m.key].photo ? 'checked' : ''}>📷 拍照了</label>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
   card.innerHTML = `
     <div class="day-card-head">
       <span class="weekday-tag">DAY ${selectedIndex + 1} / ${DAYS.length}</span>
@@ -1317,7 +1476,10 @@ function renderCard(){
         </div>
       </div>
     </div>
+    ${scheduleHtml}
     ${d.flight ? `<div style="padding:0 22px 20px;"><div class="banner flight">✈️ 今天有搭機行程，請提前確認證件與行李</div></div>` : ``}
+    ${taskMenuHtml}
+    ${mealLogHtml}
     ${spotsHtml}
     <div style="padding: 4px 22px 22px;">
       <div class="day-nav">
@@ -1331,6 +1493,26 @@ function renderCard(){
       selectedPlan = parseInt(btn.dataset.plan);
       renderCard();
     });
+  });
+  card.querySelectorAll('.task-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const i = parseInt(chip.dataset.taskIdx);
+      const sel = getSelectedTasks(selectedIndex);
+      if (sel.has(i)) sel.delete(i); else sel.add(i);
+      chip.classList.toggle('selected');
+    });
+  });
+  card.querySelectorAll('.meal-row').forEach(row => {
+    const key = row.dataset.meal;
+    const input = row.querySelector('input[type="number"]');
+    const checkbox = row.querySelector('input[type="checkbox"]');
+    input.addEventListener('input', () => {
+      meals[key].amount = input.value;
+      const newTotal = MEALS.reduce((sum, m) => sum + (parseFloat(meals[m.key].amount) || 0), 0);
+      const badge = card.querySelector('.meal-total');
+      if (badge) badge.textContent = `AUD $${newTotal.toFixed(0)}`;
+    });
+    checkbox.addEventListener('change', () => { meals[key].photo = checkbox.checked; });
   });
   card.querySelectorAll('.spot').forEach(el => el.classList.remove('open'));
   wireAccordion(card);
