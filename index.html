@@ -186,7 +186,7 @@
   }
   .day-card-head .place{
     color: var(--ink-muted);
-    font-size: 13.5px;
+    font-size: 14.5px;
   }
 
   .timeline{ padding: 14px 22px 20px; position:relative; }
@@ -228,7 +228,7 @@
   .timeline-item.am .timeline-label{ color: var(--gold); }
   .timeline-item.pm .timeline-label{ color: var(--teal); }
   .timeline-item.eve .timeline-label{ color: var(--brick); }
-  .timeline-text{ font-size: 15px; color: var(--ink); }
+  .timeline-text{ font-size: 16px; color: var(--ink); }
 
   .banner{
     margin-top: 14px;
@@ -269,25 +269,6 @@
     color: var(--ink-muted);
   }
 
-  /* ---------- Stay info ---------- */
-  .stay-info{
-    margin-top: 22px;
-    background: var(--bg-alt);
-    border-radius: 14px;
-    padding: 18px 20px;
-    font-size: 13.8px;
-    color: var(--ink-muted);
-  }
-  .stay-info h3{
-    font-family: var(--font-display);
-    font-size: 15px;
-    color: var(--ink);
-    margin: 0 0 10px;
-  }
-  .stay-info dl{ margin:0; display:grid; grid-template-columns: 76px 1fr; row-gap: 8px; column-gap: 10px; }
-  .stay-info dt{ color: var(--ink); font-weight:500; }
-  .stay-info dd{ margin:0; }
-
   footer{
     text-align:center;
     font-family: var(--font-mono);
@@ -324,8 +305,6 @@
     .plan-pill{ padding: 9px 14px; font-size: 12.5px; min-height: 40px; }
     .plan-note{ padding: 10px 18px 0; }
 
-    .stay-info{ padding: 16px 16px; }
-    .stay-info dl{ grid-template-columns: 64px 1fr; }
   }
 
   /* ---------- Spot accordion ---------- */
@@ -376,8 +355,8 @@
     color: var(--teal);
     margin-bottom: 4px;
   }
-  .spot-block p{ margin:0; font-size: 13.8px; color: var(--ink); white-space: pre-line; }
-  .spot-block p.en{ font-size: 12.5px; color: var(--ink-muted); font-style: italic; margin-top: 6px; padding-top: 8px; border-top: 1px dashed var(--line); }
+  .spot-block p{ margin:0; font-size: 15px; color: var(--ink); white-space: pre-line; }
+  .spot-block p.en{ font-size: 13.5px; color: var(--ink-muted); font-style: italic; margin-top: 6px; padding-top: 8px; border-top: 1px dashed var(--line); }
   .spot-tagline{ display:block; font-size: 12px; font-weight:400; color: var(--ink-muted); margin-top: 2px; }
   .spot-tagline .en{ font-style: italic; }
   .extras{ margin-top: 22px; }
@@ -398,12 +377,12 @@
     flex-shrink:0;
     padding-top: 1px;
   }
-  .tip-list li .tip-text{ font-size: 13.3px; color: var(--ink); }
-  .tip-list li .tip-text .en{ display:block; font-size: 12px; color: var(--ink-muted); font-style: italic; margin-top: 2px; }
+  .tip-list li .tip-text{ font-size: 14.5px; color: var(--ink); }
+  .tip-list li .tip-text .en{ display:block; font-size: 13px; color: var(--ink-muted); font-style: italic; margin-top: 2px; }
   .tip-list.facts li .tip-num{ color: var(--gold); }
   .tip-list.think li{ background: var(--teal-soft); }
   .tip-list.think li .tip-num{ color: var(--teal); }
-  .spot-links{ display:flex; gap:8px; flex-wrap:wrap; }
+  .spot-links{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 14px; }
   .spot-links a{
     font-family: var(--font-mono);
     font-size: 12px;
@@ -451,16 +430,16 @@
     border-radius: 8px;
     padding: 8px 10px;
   }
-  .term-list .term-en{ font-family: var(--font-mono); font-weight:600; font-size: 12.5px; color: var(--ink); }
-  .term-list .term-zh{ font-size: 13px; color: var(--ink); text-align:right; }
-  .term-list .term-note{ grid-column: 1 / -1; font-size: 11.3px; color: var(--ink-muted); margin-top:2px; }
+  .term-list .term-en{ font-family: var(--font-mono); font-weight:600; font-size: 13.5px; color: var(--ink); }
+  .term-list .term-zh{ font-size: 14px; color: var(--ink); text-align:right; }
+  .term-list .term-note{ grid-column: 1 / -1; font-size: 12.3px; color: var(--ink-muted); margin-top:2px; }
 
   .phrase-list{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:7px; }
   .phrase-list li{
     background: var(--teal-soft);
     border-radius: 8px;
     padding: 8px 10px;
-    font-size: 13.3px;
+    font-size: 14.3px;
     color: var(--ink);
     font-family: var(--font-mono);
   }
@@ -544,7 +523,7 @@
   .meal-total{ background: var(--teal-soft); color: var(--teal); padding: 2px 8px; border-radius: 999px; font-weight:700; }
   .meal-row{ display:flex; align-items:center; gap:10px; padding: 7px 0; border-bottom: 1px dashed var(--line); }
   .meal-row:last-child{ border-bottom:none; }
-  .meal-row .meal-name{ flex: 0 0 64px; font-size: 13.5px; color: var(--ink); }
+  .meal-row .meal-name{ flex: 0 0 64px; font-size: 14.5px; color: var(--ink); }
   .meal-row .meal-input-wrap{ flex:1; display:flex; align-items:center; gap:4px; }
   .meal-row .meal-input-wrap span{ font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); }
   .meal-row input[type="number"]{
@@ -577,7 +556,7 @@
   .schedule-row{ display:flex; gap:12px; padding: 8px 0; border-bottom: 1px solid #F0F2EF; }
   .schedule-row:last-child{ border-bottom:none; }
   .schedule-time{ flex: 0 0 92px; font-family: var(--font-mono); font-size: 12px; color: var(--brick); padding-top:1px; }
-  .schedule-text{ flex:1; font-size: 14px; color: var(--ink); }
+  .schedule-text{ flex:1; font-size: 15px; color: var(--ink); }
 
   /* ---------- Day view tabs ---------- */
   .view-tabs{
@@ -654,15 +633,6 @@
 
 <main>
   <div class="day-card" id="dayCard"></div>
-
-  <div class="stay-info">
-    <h3>住宿資訊</h3>
-    <dl>
-      <dt>地址</dt><dd>11 Prospect Street, Box Hill, VIC 3128, Australia</dd>
-      <dt>方式</dt><dd>飯店／公寓式住宿，由帶隊老師及學生共同入住管理，並非寄宿家庭（Homestay）</dd>
-      <dt>房型</dt><dd>依實際訂房分配安排，由帶隊老師統一管理入住、房間分配及每日人員確認</dd>
-    </dl>
-  </div>
 
   <div class="extras" id="extrasSection"></div>
   <div class="extras" id="vocabSection"></div>
@@ -930,6 +900,10 @@ const SPOTS = {
         { zh:"紅磚建築外觀在正午順光時最清楚好拍", en:"The red-brick exterior photographs best around midday with the sun behind you" },
         { zh:"拍攝攤販或商品前記得先詢問是否可以", en:"Always ask before photographing a stallholder or their stall" },
       ],
+      events:[
+        { zh:"🎫 Kids Passport：市集開放日上午9點起，可在資訊中心（Information Hub，F Shed 與 Queen Street 街角）索取兒童護照，沿路跟攤商收集印章換獎品（學校團體不適用）", en:"🎫 Kids Passport: available every market day from 9am at the Information Hub (corner of F Shed and Queen Street) — collect stamps from traders and redeem a prize (not available for school groups)" },
+        { zh:"🌙 Winter Night Market：每週三（6/5–8/28）17:00–22:00，街頭美食、熱飲、60多個特色攤位，免費入場。我們造訪的這天是週四，冬夜市集是週三才有。詳見<a href=\"https://thenightmarket.com.au/\" target=\"_blank\" rel=\"noopener\">官方網站</a>", en:"🌙 Winter Night Market: every Wednesday (5 June–28 Aug) 5–10pm, with street food, warm drinks, and 60+ specialty stalls — free entry. Our visit falls on a Thursday, while the Night Market runs on Wednesdays. See the <a href=\"https://thenightmarket.com.au/\" target=\"_blank\" rel=\"noopener\">official site</a>" },
+      ],
       think:[
         { zh:"你覺得在數位時代，實體市場還有存在的意義嗎？", en:"In the digital age, do physical markets still matter?" },
         { zh:"市場蓋在舊公墓上——如果你當時知道這件事，還會想逛這裡嗎？", en:"The market was built over an old cemetery — if you'd known that going in, would it change how you feel about visiting?" },
@@ -1190,16 +1164,113 @@ const SPOTS = {
 };
 
 // 不對應特定一天的延伸內容（來自同一份文件），顯示在頁面最下方
-const EXTRA_SPOTS = [
-  { name:"澳洲超市與購物", tagEn:"Everyday Shopping Life in Australia", tagZh:"澳洲的日常購物生活",
-    zh:"對國際學生來說，到澳洲第一個驚喜通常是超市。Woolworths（暱稱「Woolies」）和Coles是澳洲兩大連鎖超市，幾乎每個郊區都找得到；德國折扣超市ALDI則以每週的「Special Buys」聞名——中間走道會出現各種意想不到的商品，賣完就沒有。\n\n還有Kmart：和美國的Kmart完全不同，澳洲的Kmart是超受歡迎的平價百貨，甚至成了在地人的玩笑哏——「本來只想買一樣東西，結果推了一整台購物車出來」。對預算有限、要佈置新房間的學生來說，Kmart（還有Target、Big W）通常是採購的第一站。",
+// 延伸閱讀．墨爾本生活 —— 每天不同主題，呼應當天的行程
+const DAILY_EXTRA = {
+  0: { name:"長途飛行小知識", tagEn:"Long-Haul Flight Basics", tagZh:"夜間長途飛行的小提醒",
+    zh:"從桃園飛往墨爾本是一趟長途夜間飛行，機上時間加轉機大約要10到14小時。飛機上乾燥的空氣容易讓皮膚和喉嚨不舒服，建議多喝水、少喝含咖啡因或酒精的飲料。長時間坐著也建議每隔一兩個小時起來走動、伸展一下腿部，降低不適的機率。\n\n夜間航班的另一個小技巧是調整時差：上機後可以直接把手錶調成墨爾本時間，試著配合當地的日夜作息睡覺、進食，能幫助身體更快適應。",
+    en:"Flying from Taoyuan to Melbourne is a long overnight journey — roughly 10 to 14 hours including any transit. Cabin air is very dry, so drink plenty of water and go easy on caffeine and alcohol. Get up and stretch every hour or two.\n\nOne trick for the overnight leg: switch your watch to Melbourne time as soon as you board, and try to eat and sleep on that schedule — it helps your body adjust faster.",
+    facts:[
+      { zh:"桃園到墨爾本（含轉機）約需10–14小時", en:"Taoyuan to Melbourne takes roughly 10–14 hours including transit" },
+      { zh:"機艙濕度極低，建議每小時補充水分", en:"Cabin humidity is very low — drink water regularly" },
+      { zh:"墨爾本7月比台灣快2小時（澳洲冬令時間）", en:"Melbourne is 2 hours ahead of Taiwan in July (Australian winter time)" },
+    ] },
+  1: { name:"澳洲超市與購物", tagEn:"Everyday Shopping Life in Australia", tagZh:"澳洲的日常購物生活",
+    zh:"對國際學生來說，到澳洲第一個驚喜通常是超市。Woolworths（暱稱「Woolies」）和Coles是澳洲兩大連鎖超市，幾乎每個郊區都找得到；德國折扣超市ALDI則以每週的「Special Buys」聞名——中間走道會出現各種意想不到的商品，賣完就沒有。\n\n還有Kmart：和美國的Kmart完全不同，澳洲的Kmart是超受歡迎的平價百貨，甚至成了在地人的玩笑哏——「本來只想買一樣東西，結果推了一整台購物車出來」。",
     en:"For international students, one of the first surprises in Australia is the supermarket. Woolworths (\"Woolies\") and Coles are the two biggest chains, while German discount chain ALDI is known for its weekly \"Special Buys.\"\n\nThen there's Kmart: a beloved discount department store, famous for the running joke of \"going in for one thing and leaving with a trolley full.\"",
     facts:[
       { zh:"Woolworths（Woolies）和 Coles 是澳洲兩大連鎖超市", en:"Woolworths (\"Woolies\") and Coles are the two biggest supermarket chains" },
       { zh:"ALDI 以每週的『Special Buys』聞名", en:"ALDI is known for its weekly \"Special Buys\"" },
       { zh:"Kmart、Target、Big W 是佈置新房間常見的採購地", en:"Kmart, Target, and Big W are go-to stops for kitting out a new room" },
     ] },
-];
+  2: { name:"Myki 交通卡與電車文化", tagEn:"Myki & Tram Culture", tagZh:"墨爾本人與電車的感情",
+    zh:"墨爾本大眾運輸用的是Myki卡，電車、火車、巴士都可以用同一張卡。CBD市中心有一個「免費電車區」（Free Tram Zone），範圍內搭電車完全不用刷卡，是遊客最喜歡的隱藏福利之一。\n\n搭電車也有一些不成文的禮儀：上車讓下車的人先下、博愛座讓給有需要的人、包包放在腿上或行李架而不是佔用旁邊座位。",
+    en:"Melbourne's public transport runs on a single Myki card for trams, trains, and buses. The CBD has a Free Tram Zone — inside it, you ride trams without tapping on at all, one of the best-kept secrets for visitors.\n\nThere's tram etiquette too: let people off before you board, give up priority seats, and keep your bag on your lap rather than on the seat next to you.",
+    facts:[
+      { zh:"CBD 有一個免費電車區（Free Tram Zone）", en:"The CBD has a Free Tram Zone where trams don't require tapping on" },
+      { zh:"Myki 卡通用電車、火車與巴士", en:"A single Myki card works across trams, trains, and buses" },
+      { zh:"墨爾本電車網路是全球最大的電車系統之一", en:"Melbourne has one of the largest tram networks in the world" },
+    ] },
+  3: { name:"澳洲咖啡文化", tagEn:"Aussie Coffee Culture", tagZh:"澳洲的咖啡之都",
+    zh:"墨爾本常被稱為澳洲的咖啡之都。「Flat White（澳白咖啡）」據說就是在這裡發明的——比拿鐵奶量少、口感更濃郁。點咖啡時常會被問「Long black or short black?」，咖啡師（barista）在澳洲是一個備受尊重的專業職業。\n\n跟連鎖咖啡店比起來，墨爾本人更習慣在巷弄裡的獨立咖啡館排隊，即使多等五分鐘也心甘情願。",
+    en:"Melbourne is often called Australia's coffee capital. The flat white is said to have been invented here — less milk, more intensity than a latte. Order coffee and you might get asked \"long black or short black?\" Baristas here are treated as skilled professionals.\n\nLocals will happily queue at a hole-in-the-wall laneway café over a chain store, even if it means a longer wait.",
+    facts:[
+      { zh:"Flat White 據說起源於澳洲／紐西蘭", en:"The flat white is said to have originated in Australia or New Zealand" },
+      { zh:"Barista（咖啡師）在澳洲是受尊重的專業職業", en:"Barista is treated as a respected, skilled profession in Australia" },
+      { zh:"墨爾本人偏好巷弄裡的獨立咖啡館勝過連鎖店", en:"Locals often prefer independent laneway cafés over chains" },
+    ] },
+  4: { name:"澳洲教育制度小百科", tagEn:"A Quick Guide to Australian Education", tagZh:"大學、TAFE 與學期制",
+    zh:"澳洲的教育體系跟台灣不太一樣：學士學位通常只要3年（部分領域4年起），碩士1到2年。除了大學，還有平行的TAFE體系，提供木工、餐飲、美容等職業證書課程，畢業生的就業銜接率往往很高。\n\n澳洲學校用「Term」制，一年分成4個學期，7月正好落在Term 2和Term 3之間的假期，這也是為什麼墨爾本大學這時候有空檔接待國際交流團。",
+    en:"Australia's education system differs from Taiwan's: a bachelor's degree usually takes 3 years, and a master's 1–2 years. Alongside universities sits TAFE, a parallel vocational system offering trade certificates — often with strong job placement.\n\nAustralian schools run on four terms a year, and July falls in the school holidays between Term 2 and Term 3 — exactly why university campuses have room to host groups like yours.",
+    facts:[
+      { zh:"澳洲學士學位通常3年，碩士1–2年", en:"A bachelor's degree is usually 3 years, a master's 1–2 years" },
+      { zh:"TAFE 是與大學平行的技職教育體系", en:"TAFE is a vocational system running parallel to universities" },
+      { zh:"7月是維州 Term 2 與 Term 3 之間的學校假期", en:"July falls in the school holidays between Term 2 and Term 3 in Victoria" },
+    ] },
+  5: { name:"澳洲天氣與「一日四季」", tagEn:"Melbourne Weather: Four Seasons in One Day", tagZh:"洋蔥式穿法求生指南",
+    zh:"墨爾本人常自嘲「一天可以經歷四季」——早上可能陽光普照，中午突然下雨，下午又颳起冷風。這跟墨爾本所在的地理位置有關，來自內陸的熱風跟來自南極海域的冷風經常在這裡交會。\n\n7月是南半球的冬天，日夜溫差大，建議洋蔥式穿法：一件保暖內層、一件外套、一件防風防雨的外層，隨時可以視情況增減。",
+    en:"Melburnians joke that you can experience \"four seasons in one day\" — sun in the morning, sudden rain by noon, cold wind by afternoon. It's down to geography: hot inland air and cold air from the Southern Ocean frequently collide here.\n\nJuly is winter in the Southern Hemisphere, with big swings between day and night. Dress in layers — a warm base layer, a jumper, and a windproof/waterproof outer layer.",
+    facts:[
+      { zh:"『一天四季』是墨爾本人常說的天氣笑話", en:"\"Four seasons in one day\" is a well-worn Melbourne weather joke" },
+      { zh:"7月是南半球冬季，日夜溫差大", en:"July is winter in the Southern Hemisphere, with big day/night swings" },
+      { zh:"洋蔥式穿法是應對墨爾本天氣的標準做法", en:"Layering is the standard way locals dress for Melbourne's weather" },
+    ] },
+  6: { name:"小費文化與消費禮儀", tagEn:"Tipping & Consumer Etiquette", tagZh:"不用算小費的地方",
+    zh:"跟台灣一樣，澳洲並沒有強制小費文化——服務生的薪水已經包含在基本工資裡，帳單上通常也看不到「service charge」。如果覺得服務特別好，留一點零錢表示感謝就足夠，完全不像北美那樣有「該給多少%」的壓力。\n\n購物退換貨也很直接：大多數連鎖店只要保留收據，換貨或退款都很簡單。",
+    en:"Like Taiwan, Australia has no mandatory tipping culture — wait staff are paid a proper minimum wage, and there's usually no \"service charge\" on the bill. Rounding up or leaving small change for great service is plenty; there's none of the North American pressure to calculate a percentage.\n\nReturns and exchanges are also straightforward — keep your receipt and most chain stores make it easy.",
+    facts:[
+      { zh:"澳洲沒有強制小費文化，服務生領基本工資", en:"Tipping isn't expected in Australia — staff are paid a real minimum wage" },
+      { zh:"帳單上通常不會出現額外的 service charge", en:"Bills usually don't carry an extra service charge" },
+      { zh:"保留收據，退換貨通常很簡單", en:"Keep your receipt — returns and exchanges are usually straightforward" },
+    ] },
+  7: { name:"澳洲的環保與資源回收", tagEn:"Recycling & Sustainability in Australia", tagZh:"紅黃綠三色垃圾桶",
+    zh:"澳洲的垃圾分類用顏色區分：紅色蓋子是一般垃圾、黃色蓋子是可回收物（紙類、塑膠、玻璃、鐵鋁罐）、綠色蓋子則是廚餘與園藝廢棄物。維多利亞州近年也逐步淘汰一次性塑膠袋和吸管。\n\n墨爾本人對『永續生活』的意識很強，這也呼應了整座城市對藝術、公共空間再利用的重視——就像 Hosier Lane 把一條原本荒廢的巷子，變成了城市文化的一部分。",
+    en:"Australian household bins are colour-coded: red lids for general waste, yellow for recycling, and green for food and garden waste. Victoria has also been phasing out single-use plastic bags and straws.\n\nMelburnians take sustainability seriously — echoed in how the city reuses public space for art and culture, the same instinct that turned a forgotten laneway into Hosier Lane.",
+    facts:[
+      { zh:"垃圾桶依顏色分類：紅色一般垃圾、黃色可回收、綠色廚餘", en:"Bins are colour-coded: red for general waste, yellow for recycling, green for food/garden waste" },
+      { zh:"維多利亞州已淘汰一次性塑膠袋與吸管", en:"Victoria has phased out single-use plastic bags and straws" },
+      { zh:"許多咖啡店鼓勵自備環保杯", en:"Many cafés encourage customers to bring their own reusable cup" },
+    ] },
+  8: { name:"打招呼與澳式英文", tagEn:"Aussie Greetings & Slang", tagZh:"G'day 與縮寫俚語",
+    zh:"澳洲人講話很隨性，「G'day」（你好）、「How ya going?」（你好嗎）是最常聽到的招呼語。澳式英文也喜歡把字縮短加「o」或「ie」，例如 barbie（barbecue）、arvo（afternoon）、servo（service station）。\n\n在餐旅服務業，親切、直接、帶點幽默感的溝通方式很受歡迎——跟台灣服務業常見的正式語氣不太一樣，值得在今天觀察看看。",
+    en:"Australians speak casually — \"G'day\" and \"How ya going?\" are the classic greetings. Aussie English also loves shortening words and adding \"-o\" or \"-ie\": barbie (barbecue), arvo (afternoon), servo (service station).\n\nIn hospitality, a friendly, direct, slightly humorous style goes down well — quite different from the more formal tone common in Taiwanese service culture. Worth watching for today.",
+    facts:[
+      { zh:"「G'day」「How ya going?」是最常見的澳式招呼語", en:"\"G'day\" and \"How ya going?\" are the classic Aussie greetings" },
+      { zh:"澳式英文喜歡縮短字詞並加上 -o 或 -ie", en:"Aussie English loves shortening words with an -o or -ie ending" },
+      { zh:"澳洲餐旅業偏好親切直接、帶幽默感的溝通風格", en:"Australian hospitality favours a friendly, direct, humour-tinged style" },
+    ] },
+  9: { name:"行動支付與零錢文化", tagEn:"Tap-and-Go & Coin Culture", tagZh:"越來越少人用現金",
+    zh:"澳洲是全球「無現金化」程度最高的國家之一，幾乎所有店家都可以Tap and go（感應式付款），很多小店甚至已經完全不收現金。\n\n如果你帶了澳幣現金，會發現澳洲的硬幣設計很特別：面額越大、硬幣通常越小（1元、2元反而比50分還小），第一次用很容易搞混。",
+    en:"Australia is one of the most cashless countries in the world — almost every shop takes tap-and-go, and plenty of small businesses don't accept cash at all anymore.\n\nIf you do carry Australian cash, the coins are surprising: the $1 and $2 coins are smaller than the 50c — easy to mix up the first time.",
+    facts:[
+      { zh:"澳洲是全球無現金支付程度最高的國家之一", en:"Australia is one of the most cashless countries in the world" },
+      { zh:"許多小店已經完全不收現金", en:"Many small businesses no longer accept cash at all" },
+      { zh:"$1、$2 硬幣比 50 分硬幣還小，容易搞混", en:"The $1 and $2 coins are smaller than the 50c coin — easy to confuse" },
+    ] },
+  10: { name:"澳洲的職業安全文化", tagEn:"Workplace Safety Culture (WHS)", tagZh:"安全裝備不是形式",
+    zh:"澳洲的職場安全（WHS）規範非常嚴格，尤其是在建築和木工這類需要操作機具的產業。任何進入工地或工廠實作環境的人，通常都必須穿戴安全帽、安全鞋、反光背心等基本裝備，這不是形式，而是被視為每個人的基本權利。\n\n這種『安全第一』的文化也反映在薪資結構上——需要高風險技能的技職工作，薪水往往不比大學畢業生低。",
+    en:"Australia's Work Health and Safety (WHS) regulations are strict, especially in trades like construction and carpentry. Anyone entering a workshop or job site is required to wear a hard hat, safety boots, and a hi-vis vest — not a formality, but a basic right.\n\nThis \"safety first\" culture shows up in pay too — high-risk trade skills are often compensated on par with university graduate salaries.",
+    facts:[
+      { zh:"WHS（職場安全）規範在建築、木工產業特別嚴格", en:"WHS (Work Health and Safety) rules are especially strict in construction and carpentry" },
+      { zh:"安全帽、安全鞋、反光背心是工地基本裝備", en:"Hard hats, safety boots, and hi-vis vests are standard job-site gear" },
+      { zh:"高風險技職工作的薪資常常不輸大學畢業生", en:"High-risk trade jobs are often paid on par with university graduate salaries" },
+    ] },
+  11: { name:"退稅與行李打包", tagEn:"Tourist Refunds & Packing Up", tagZh:"TRS 退稅與海關小提醒",
+    zh:"如果在澳洲同一家店消費超過AUD $300並索取發票，離境時可以在機場申請TRS（Tourist Refund Scheme）退還商品的GST，需要在起飛前到機場的TRS櫃檯辦理。\n\n打包行李時，農產品、種子、木製品等要特別小心——澳洲和台灣的海關對於帶出/帶入動植物產品都有嚴格規定，最好先確認清楚，避免臨時被要求丟棄或罰款。",
+    en:"If you spend over AUD $300 at a single store and keep the receipt, you can claim back the GST at the airport before departure through the Tourist Refund Scheme (TRS).\n\nWhen packing, be careful with produce, seeds, and wooden items — both Australian and Taiwanese customs have strict rules on plant and animal products.",
+    facts:[
+      { zh:"消費滿AUD $300可申請TRS退還GST", en:"Spend over AUD $300 at one store and you can claim GST back via TRS" },
+      { zh:"需在機場出境前的TRS櫃檯辦理", en:"TRS claims are processed at the airport TRS counter before departure" },
+      { zh:"農產品、種子、木製品攜帶出入境有嚴格規定", en:"Produce, seeds, and wooden items are strictly regulated at customs" },
+    ] },
+  12: { name:"回台灣的海關與檢疫", tagEn:"Customs & Biosecurity Back in Taiwan", tagZh:"旅程結束後的反思",
+    zh:"回到台灣時，記得誠實申報行李內容，尤其是食品、種子、木製紀念品等——動植物防疫檢疫局對境外帶入的產品把關嚴格，違規申報可能會被罰款。\n\n結束12天的旅程，也是整理心情的時候：這趟旅程你經歷了什麼？學到了什麼？帶著這些收穫回到日常生活，才是這趟研學真正的開始。",
+    en:"When you land back in Taiwan, declare your luggage honestly — especially food, seeds, and wooden souvenirs. Taiwan's biosecurity rules on plant and animal products are strict, and undeclared items can mean a fine.\n\nAs these 12 days wrap up, it's also a moment to reflect: what did you experience? What did you learn? Carrying that back into daily life is really where this trip begins.",
+    facts:[
+      { zh:"回台申報食品、種子、木製品時要誠實申報", en:"Declare food, seeds, and wooden items honestly on arrival in Taiwan" },
+      { zh:"動植物防疫檢疫局對違規申報的罰則很明確", en:"Taiwan's biosecurity authority has clear penalties for undeclared items" },
+      { zh:"旅程結束後的反思，才是研學真正的開始", en:"Reflecting after the trip is where the real learning journey begins" },
+    ] },
+};
 
 // 內容整理自你提供的《雙語詞彙補充表》
 const VOCAB_CATEGORIES = [
@@ -1462,14 +1533,15 @@ function renderSpot(s, i){
         <span class="chev">⌄</span>
       </button>
       <div class="spot-body"><div class="spot-body-inner">
-        <div class="spot-block"><div class="spot-block-label">📖 景點故事 · THE STORY</div><p>${s.zh}</p><p class="en">${s.en}</p></div>
-        ${s.facts && s.facts.length ? `<div class="spot-block"><div class="spot-block-label">🔑 小知識 · QUICK FACTS</div>${tipListHtml(s.facts, 'facts')}</div>` : ''}
-        ${s.photoTips && s.photoTips.length ? `<div class="spot-block"><div class="spot-block-label">📷 拍攝手法 · PHOTO TIPS</div>${tipListHtml(s.photoTips, 'photo')}</div>` : ''}
-        ${s.think && s.think.length ? `<div class="spot-block"><div class="spot-block-label">💭 想一想 · THINK ABOUT IT</div>${tipListHtml(s.think, 'think')}</div>` : ''}
         <div class="spot-links">
           <a href="${mapsLink(s.name)}" target="_blank" rel="noopener">📍 Google 地圖</a>
           <a href="${transitLink(s.name)}" target="_blank" rel="noopener">🚌 大眾運輸路線</a>
         </div>
+        <div class="spot-block"><div class="spot-block-label">📖 景點故事 · THE STORY</div><p>${s.zh}</p><p class="en">${s.en}</p></div>
+        ${s.events && s.events.length ? `<div class="spot-block"><div class="spot-block-label">🎫 市集活動 · MARKET EVENTS</div>${tipListHtml(s.events, 'facts')}</div>` : ''}
+        ${s.facts && s.facts.length ? `<div class="spot-block"><div class="spot-block-label">🔑 小知識 · QUICK FACTS</div>${tipListHtml(s.facts, 'facts')}</div>` : ''}
+        ${s.photoTips && s.photoTips.length ? `<div class="spot-block"><div class="spot-block-label">📷 拍攝手法 · PHOTO TIPS</div>${tipListHtml(s.photoTips, 'photo')}</div>` : ''}
+        ${s.think && s.think.length ? `<div class="spot-block"><div class="spot-block-label">💭 想一想 · THINK ABOUT IT</div>${tipListHtml(s.think, 'think')}</div>` : ''}
       </div></div>
     </div>
   `;
@@ -1493,12 +1565,13 @@ function wireAccordion(container){
 
 function renderExtras(){
   const el = document.getElementById('extrasSection');
-  if (!EXTRA_SPOTS.length) return;
+  const extra = DAILY_EXTRA[selectedIndex];
+  if (!extra) { el.innerHTML = ''; return; }
   el.innerHTML = `
     <h3>延伸閱讀・墨爾本生活</h3>
-    <div class="sub">跟行程沒有綁定特定一天，但很適合先讀一讀的墨爾本小知識</div>
+    <div class="sub">今天（DAY ${selectedIndex + 1}）的墨爾本生活小知識</div>
     <div class="spot-list">
-      ${EXTRA_SPOTS.map((s, i) => renderSpot(s, i)).join('')}
+      ${renderSpot(extra, 0)}
     </div>
   `;
   wireAccordion(el);
@@ -1684,17 +1757,13 @@ function render(){
   document.getElementById('statusText').innerHTML = statusMsg;
   renderRoute();
   renderCard();
+  renderExtras();
   const activeStop = document.querySelector('.stop.active');
   if (activeStop) activeStop.scrollIntoView({ inline: 'center', block: 'nearest' });
 }
 
 function initTheme(){
   const btn = document.getElementById('themeToggle');
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  if (prefersDark) {
-    document.body.classList.add('dark-mode');
-    btn.textContent = '☀️';
-  }
   btn.addEventListener('click', () => {
     const isDark = document.body.classList.toggle('dark-mode');
     btn.textContent = isDark ? '☀️' : '🌙';
@@ -1702,7 +1771,6 @@ function initTheme(){
 }
 
 render();
-renderExtras();
 renderVocab();
 renderInterviewToolkit();
 initTheme();
